@@ -1,0 +1,100 @@
+.logoImage {
+    height: 80px;
+    position: absolute;
+    display: block;
+    left: 50px;
+    bottom: 5px;
+
+}
+.log_in_button {
+    width: 150px;
+    height: 50px;
+    border-radius: 25px;
+    border: 2px solid green;
+    color: white;
+    background-color: green;
+    font-family: "Lucida Console", monospace;
+    font-size: 18px;
+    cursor: pointer;
+    position: absolute;
+    display: inline-block;
+    top: 20px;
+    right: 200px;
+}
+.register_button {
+    width: 150px;
+    padding: 5px;
+    height: 50px;
+    border-radius: 25px;
+    border: 2px solid green;
+    color: green;
+    background-color: white;
+    font-family: "Lucida Console", monospace;
+    font-size: 18px;
+    cursor: pointer;
+    position: absolute;
+    display: inline-block;
+    top: 20px;
+    right: 40px;
+
+}
+.language {
+    font-family: "Lucida Console", monospace;
+    font-size: 14px;
+    border: none;
+    outline: none;
+    top: 40px;
+    right: 370px;
+    position: absolute;
+    display: block;
+}
+nav {
+    position: fixed;
+    z-index: 9998;
+    top: 0;
+    width: 100%;
+    height: 90px;
+}
+
+nav ul {
+    background-color: white;
+    list-style: none;
+    padding: .2em 2em 40px;
+    margin: auto;
+    text-align: center;
+}
+
+nav ul li {
+    /*background-color: white;*/
+    display: inline-block;
+    margin: 0;
+    padding: .2em .7em;
+}
+
+nav a {
+    width: 100%;
+    height: 100%;
+    color: darkgrey;
+    text-decoration: none;
+    font-size: 1.15em;
+    font-weight: lighter;
+    letter-spacing: 1px;
+    transition: .25s ease-in-out;
+}
+nav a:hover {
+    color: green;
+}
+
+nav a:focus {
+    color: green;
+}
+
+.nav-bg {
+    content: '';
+    position: fixed;
+    display: block;
+    top: -100%;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
