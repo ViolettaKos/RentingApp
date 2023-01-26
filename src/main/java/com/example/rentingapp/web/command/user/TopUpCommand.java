@@ -1,15 +1,18 @@
-package com.example.rentingapp.web.command.base;
+package com.example.rentingapp.web.command.user;
 
 import com.example.rentingapp.exception.ServiceException;
+import com.example.rentingapp.model.User;
 import com.example.rentingapp.service.ServiceFactory;
 import com.example.rentingapp.service.UserService;
 import com.example.rentingapp.web.command.Command;
 import com.example.rentingapp.web.command.CommandType;
-import com.example.rentingapp.web.command.CommandUtil;
+import static com.example.rentingapp.web.command.CommandUtil.*;
 import com.example.rentingapp.web.command.constants.Commands;
+import com.example.rentingapp.web.command.constants.Model;
 import com.example.rentingapp.web.command.constants.Path;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 public class TopUpCommand implements Command {
@@ -24,22 +27,23 @@ public class TopUpCommand implements Command {
 
     private String doPost(HttpServletRequest req) throws ServiceException {
         int amount= Integer.parseInt(req.getParameter("amount"));
-        String login=req.getParameter("login");
         String path = Path.PROFILE_PAGE;
+        HttpSession session = req.getSession();
+        User user = (User) session.getAttribute(Model.LOGGED);
+        user.setMoney(user.getMoney()+amount);
         UserService userService = ServiceFactory.getUserService();
-        boolean res = userService.updateMoney(login, amount);
+        boolean res = userService.updateMoney(user.getUsername(), amount);
         LOG.trace("Is money added? "+res);
-        if(res) {
-            req.getSession().setAttribute(Path.CURRENT_PATH, path);
-        } else {
+        if(!res) {
             LOG.trace("Error in adding money");
-            path = Path.ERROR_PAGE;
+            req.getSession().setAttribute(Path.CURRENT_PATH, Path.ERROR_PAGE);
         }
-        return CommandUtil.redirectCommand(Commands.TOP_UP);
+        req.getSession().setAttribute(Path.CURRENT_PATH, path);
+        return redirectCommand(Commands.TOP_UP);
     }
 
-    private String doGet(HttpServletRequest request) throws ServiceException {
-        LOG.trace("Path: " + CommandUtil.getPath(request));
-        return CommandUtil.getPath(request);
+    private String doGet(HttpServletRequest request) {
+        LOG.trace("Path: " + getPath(request));
+        return getPath(request);
     }
 }

@@ -7,15 +7,25 @@
     <tlib-version>1.0</tlib-version>
     <jsp-version>1.2</jsp-version>
     <short-name>customTags</short-name>
-    <description>Tag library for Car Rent application</description>
+    <description>Tag library for Renting application</description>
     <tag>
         <name>date</name>
-        <tag-class>com.example.project.utils.tag.CurrentDateTag</tag-class>
+        <tag-class>com.example.rentingapp.web.tags.CurrentDateTag</tag-class>
         <body-content>empty</body-content>
     </tag>
     <tag>
         <name>minAge</name>
-        <tag-class>com.example.project.utils.tag.AdultAgeTag</tag-class>
+        <tag-class>com.example.rentingapp.web.tags.AdultAgeTag</tag-class>
+        <body-content>empty</body-content>
+    </tag>
+    <tag>
+        <name>year</name>
+        <tag-class>com.example.rentingapp.web.tags.CurrentYearTag</tag-class>
+        <body-content>empty</body-content>
+    </tag>
+    <tag>
+        <name>expYear</name>
+        <tag-class>com.example.rentingapp.web.tags.ExpYearTag</tag-class>
         <body-content>empty</body-content>
     </tag>
 </taglib>

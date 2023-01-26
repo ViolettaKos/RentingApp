@@ -1,4 +1,4 @@
-package com.example.project.model;
+package com.example.rentingapp.model;
 
 import java.util.Date;
 import java.util.Objects;

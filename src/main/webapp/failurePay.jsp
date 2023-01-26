@@ -61,8 +61,6 @@
     font-size: 18px;
     cursor: pointer;
   }
-
-
 </style>
 
 
@@ -74,11 +72,10 @@
   </div>
   <h1><fmt:message key="failure"/></h1>
   <p><fmt:message key="wrong"/>!<br/><fmt:message key="check"/></p>
-  <form action="${pageContext.request.contextPath}/displayOrder">
-    <input class="log_in_button" type="submit" value="Go back" />
+  <form action="${pageContext.request.contextPath}/controller" method="get">
+    <input type="hidden" name="command" value="show_my_orders">
+    <input class="log_in_button" type="submit" value="<fmt:message key="go.back"/>" />
   </form>
 </div>
-
-
 </body>
 </html>

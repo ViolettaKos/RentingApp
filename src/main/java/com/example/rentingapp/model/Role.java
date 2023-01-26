@@ -1,4 +1,4 @@
-package com.example.project.model;
+package com.example.rentingapp.model;
 
 public enum Role {
     ADMIN, USER, MANAGER;

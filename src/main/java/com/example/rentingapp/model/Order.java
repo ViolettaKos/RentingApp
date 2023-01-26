@@ -1,14 +1,11 @@
-package com.example.project.model;
+package com.example.rentingapp.model;
 
 
 import java.util.Objects;
 
-public class Order {
-
-    private final int order_id;
+public class Order extends Entity {
     private String login;
     private boolean isPayed;
-
     private boolean isRejected;
     private int total_price;
     private int car_id;
@@ -16,12 +13,10 @@ public class Order {
     private String to;
     private long total_days;
     private boolean option;
-
     private String comment;
 
-    public Order(int order_id, String login, boolean isPayed, boolean isRejected, int total_price, int car_id,
+    public Order(String login, boolean isPayed, boolean isRejected, int total_price, int car_id,
                  String from, String to, long total_days, boolean option, String comment) {
-        this.order_id = order_id;
         this.login = login;
         this.isPayed = isPayed;
         this.total_price = total_price;
@@ -48,10 +43,6 @@ public class Order {
 
     public void setRejected(boolean rejected) {
         isRejected = rejected;
-    }
-
-    public int getOrder_id() {
-        return order_id;
     }
 
     public String getLogin() {
@@ -122,7 +113,6 @@ public class Order {
     @Override
     public String toString() {
         return "Order{" +
-                "order_id=" + order_id +
                 ", login='" + login + '\'' +
                 ", isPayed=" + isPayed +
                 ", isRejected=" + isRejected +
@@ -141,11 +131,11 @@ public class Order {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return order_id == order.order_id && isPayed == order.isPayed && isRejected == order.isRejected && total_price == order.total_price && car_id == order.car_id && total_days == order.total_days && option == order.option && login.equals(order.login) && from.equals(order.from) && to.equals(order.to) && comment.equals(order.comment);
+        return isPayed == order.isPayed && isRejected == order.isRejected && total_price == order.total_price && car_id == order.car_id && total_days == order.total_days && option == order.option && login.equals(order.login) && from.equals(order.from) && to.equals(order.to) && comment.equals(order.comment);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(order_id, login, isPayed, isRejected, total_price, car_id, from, to, total_days, option, comment);
+        return Objects.hash(login, isPayed, isRejected, total_price, car_id, from, to, total_days, option, comment);
     }
 }

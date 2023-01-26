@@ -1,6 +1,21 @@
-package com.example.project.web.command.constants;
+package com.example.rentingapp.web.command.constants;
 
-public class Model {
+public interface Model {
 
-    public static final String USER= "user";
+    String USER= "user";
+
+    String ADMIN= "admin";
+
+    String MANAGER= "manager";
+    String LOGGED= "logged";
+    String MESSAGE= "msg";
+
+    String CAR="car";
+    String ORDERS="orders";
+
+
+
+
+
+
 }

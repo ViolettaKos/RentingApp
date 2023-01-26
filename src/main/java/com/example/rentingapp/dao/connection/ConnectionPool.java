@@ -1,4 +1,4 @@
-package com.example.project.dao.connection;
+package com.example.rentingapp.dao.connection;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -17,7 +17,11 @@ public class ConnectionPool {
     private static final String USER="user";
     private static final String PASS="password";
 
-    private static final String DRIVER="driver";
+    private static final String DRIVER="db.driver";
+
+    private static final String CACHE_PREP="cachePrepStmts";
+    private static final String CACHE_SIZE_PREP="prepStmtCacheSize";
+    private static final String CACHE_LIMI_PREP="prepStmtCacheSqlLimit";
 
     private static final String FILE="app.properties";
 
@@ -36,6 +40,7 @@ public class ConnectionPool {
             }
             dataSource=new HikariDataSource(getHikariConfig(properties));
             LOG.trace("Connection done!");
+            LOG.trace("Datasourse: "+dataSource.toString());
         }
         return dataSource;
     }
@@ -45,9 +50,9 @@ public class ConnectionPool {
         LOG.trace("Creating the config with HikariConfig");
         HikariConfig hikaConfig = new HikariConfig();
         hikaConfig.setJdbcUrl(properties.getProperty(URL));
-        hikaConfig.setUsername(USER);
-        hikaConfig.setPassword(PASS);
-        hikaConfig.setDriverClassName(DRIVER);
+        hikaConfig.setUsername(properties.getProperty(USER));
+        hikaConfig.setPassword(properties.getProperty(PASS));
+        hikaConfig.setDriverClassName(properties.getProperty(DRIVER));
         hikaConfig.setDataSourceProperties(properties);
         return hikaConfig;
     }

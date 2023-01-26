@@ -1,11 +1,10 @@
-package com.example.project.utils;
+package com.example.rentingapp.utils;
 
-import com.example.project.exceptions.WrongPasswordException;
+
+import com.example.rentingapp.exception.WrongPasswordException;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 import org.apache.log4j.Logger;
-
-
 
 
 public final class HashingPassword {

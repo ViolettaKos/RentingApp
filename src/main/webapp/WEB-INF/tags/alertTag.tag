@@ -8,7 +8,7 @@
 <c:if test="${not empty msg}">
     <hr>
     <div class="alert alert-danger">
-        <strong><fmt:message key="oops"/> </strong>${msg}
+        <strong><fmt:message key="oops"/> </strong><fmt:message key="${msg}"/>
         <fmt:message key="try"/>
     </div>
     <hr>

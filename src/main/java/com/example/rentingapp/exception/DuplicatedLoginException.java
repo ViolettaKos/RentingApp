@@ -1,8 +1,8 @@
 package com.example.rentingapp.exception;
 
-public class DuplicatedLogin extends ServiceException {
+public class DuplicatedLoginException extends ServiceException {
 
-    public DuplicatedLogin() {
+    public DuplicatedLoginException() {
         super(ExcConstants.DUPLICATE_LOGIN);
     }
 }

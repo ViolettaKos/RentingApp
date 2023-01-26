@@ -1,14 +1,28 @@
-package com.example.project.web.command.constants;
+package com.example.rentingapp.web.command.constants;
 
-public final class Path {
+public interface Path {
 
-    public static final String MAIN_PAGE = "mainPage.jsp";
-    public static final String ERROR_PAGE = "/WEB-INF/view/errorPage.jsp";
+    String CONTROLLER_PAGE = "controller";
 
-    public static final String FORWARD_USER_REGISTRATION_PAGE = "/WEB-INF/view/allUsers/registration.jsp";
-    public static final String REDIRECT_USER_REGISTRATION_PAGE = "controller?command=user_registration";
+    String CURRENT_PATH = "currentPath";
 
+    ////////////////////           BASE           ////////////////////
+    String MAIN_PAGE = "mainPage.jsp";
+    String ERROR_PAGE = "errorPage.jsp";
+    String SIGN_UP_PAGE = "signUp.jsp";
+    String LOGIN_PAGE = "login.jsp";
+
+    ////////////////////           CARS           ////////////////////
+    String BOOK_PAGE="bookPage.jsp";
+    String PRODUCT_PAGE="productPage.jsp";
+
+    ////////////////////           ORDER           ////////////////////
+    String ORDER_PAGE="orderPage.jsp";
+    String FAILURE_PAGE="failurePay.jsp";
+    String SUCCESS_PAGE="successfulPay.jsp";
 
     ////////////////////           PROFILE           ////////////////////
-    public static final String PROFILE_PAGE = "profilePage.jsp";
+    String PROFILE_PAGE = "profilePage.jsp";
+    String EDIT_PAGE="editProfile.jsp";
+    String MY_ORDERS="myOrders.jsp";
 }

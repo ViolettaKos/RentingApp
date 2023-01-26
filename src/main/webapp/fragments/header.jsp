@@ -5,11 +5,11 @@
 <fmt:setBundle basename="language"/>
 
 
-<nav>
+<nav style="background-color: white">
     <div class="nav-bg"></div>
     <ul style="font-family: system-ui;">
         <li><a href="mainPage.jsp" ><fmt:message key="main"/></a></li>
-        <li><a href="bookPage.jsp"><fmt:message key="book"/></a></li>
+        <li><a href="controller?command=show_cars"><fmt:message key="book"/></a></li>
         <li><a href="profilePage.jsp"><fmt:message key="profile"/></a></li>
         <li><a href="contactsPage.jsp"><fmt:message key="contacts"/></a></li>
     </ul>

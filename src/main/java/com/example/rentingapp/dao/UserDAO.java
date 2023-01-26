@@ -1,9 +1,20 @@
-package com.example.project.dao;
+package com.example.rentingapp.dao;
 
-import com.example.project.exception.DAOException;
-import com.example.project.model.User;
+
+import com.example.rentingapp.exception.DAOException;
+import com.example.rentingapp.model.User;
+
+import java.util.Optional;
 
 public interface UserDAO {
 
-    User addUser() throws DAOException;
+    void addUser(User user) throws DAOException;
+
+    void updateUser(User user) throws DAOException;
+
+    Optional<User> getUserByLogin(String login) throws DAOException;
+
+    boolean checkIfExists(String username) throws DAOException;
+
+    boolean changeAmount(int amount, String login) throws DAOException;
 }

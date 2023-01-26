@@ -3,4 +3,27 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
          version="5.0">
+
+
+
+    <filter>
+        <filter-name>LocaleFilter</filter-name>
+        <filter-class>com.example.rentingapp.web.filters.LocaleFilter</filter-class>
+        <init-param>
+            <param-name>defaultLocale</param-name>
+            <param-value>en_US</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>LocaleFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <jsp-config>
+        <taglib>
+            <taglib-uri>customTags</taglib-uri>
+            <taglib-location>/WEB-INF/custom.tld</taglib-location>
+        </taglib>
+    </jsp-config>
 </web-app>

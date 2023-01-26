@@ -1,8 +1,9 @@
-package com.example.project.web.command.base;
+package com.example.rentingapp.web.command.base;
 
-import com.example.project.web.command.Command;
-import com.example.project.web.command.CommandType;
-import com.example.project.web.command.constants.Path;
+
+import com.example.rentingapp.web.command.Command;
+import com.example.rentingapp.web.command.CommandType;
+import com.example.rentingapp.web.command.constants.Path;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;

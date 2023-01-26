@@ -1,30 +1,35 @@
-package com.example.project.web.command.user;
+package com.example.rentingapp.web.command.user;
 
-import com.example.project.exception.ServiceException;
-import com.example.project.model.Role;
-import com.example.project.model.User;
-import com.example.project.service.ServiceFactory;
-import com.example.project.service.UserService;
-import com.example.project.web.command.Command;
-import com.example.project.web.command.CommandType;
-import com.example.project.web.command.constants.Model;
-import com.example.project.web.command.constants.Path;
+import com.example.rentingapp.dao.DAOImpl.constants.Fields;
+import com.example.rentingapp.exception.*;
+import com.example.rentingapp.model.Role;
+import com.example.rentingapp.model.User;
+import com.example.rentingapp.service.ServiceFactory;
+import com.example.rentingapp.service.UserService;
+import com.example.rentingapp.utils.Validator;
+import com.example.rentingapp.web.command.Command;
+import com.example.rentingapp.web.command.CommandType;
+import com.example.rentingapp.web.command.CommandUtil;
+import com.example.rentingapp.web.command.constants.Commands;
+import com.example.rentingapp.web.command.constants.Model;
+import com.example.rentingapp.web.command.constants.Path;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
-import java.io.IOException;
 
 public class UserRegistrCommand implements Command {
 
     private static final Logger LOG = Logger.getLogger(UserRegistrCommand.class);
+    private final Validator validator=new Validator();
+
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, CommandType commandType) throws ServiceException {
         LOG.debug("Start executing Command");
-        return CommandType.GET==commandType ? doGet(request, response) : doPost(request, response);
+        return CommandType.GET==commandType ? doGet(request) : doPost(request);
     }
 
-    private String doPost(HttpServletRequest req, HttpServletResponse resp) throws ServiceException {
+    private String doPost(HttpServletRequest req) throws ServiceException {
         String firstname = req.getParameter("firstname");
         LOG.trace("Request parameter: fn --> " + firstname);
         String lastname = req.getParameter("lastname");
@@ -38,25 +43,29 @@ public class UserRegistrCommand implements Command {
         String email = req.getParameter("email");
         LOG.trace("Request parameter: email --> " + email);
         String telephone = req.getParameter("telephone");
-        LOG.trace("Request parameter: telephone --> " + telephone);
-
-        String path=null;
+        String path=Path.PROFILE_PAGE;
+        User user=new User(firstname, lastname, username, email, pass, telephone, Role.USER, false, 0);
         try {
-            User user=new User(firstname, lastname, username, email, pass, telephone, Role.USER, false, 0);
+
+            validator.isMatched(pass, repeated_pass);
             UserService userService = ServiceFactory.getUserService();
+            userService.checkIfExists(username);
             userService.add(user);
-            req.getSession().setAttribute(Model.USER, user);
-        } catch (ServiceException e) {
+            req.getSession().setAttribute(Fields.ROLE, user.getRole());
+            req.getSession().setAttribute(Model.LOGGED, user);
+
+        } catch (IncorrectDataException | IncorrectEmailException | DuplicatedLoginException | PasswordNotMatchesException e) {
             LOG.trace("Error in executing command");
-            req.getSession().setAttribute("msg", e.getMessage());
-            path=Path.REDIRECT_USER_REGISTRATION_PAGE;
+            req.getSession().setAttribute(Model.MESSAGE, e.getMessage());
+            path= Path.SIGN_UP_PAGE;
         }
-        path=Path.PROFILE_PAGE;
-        return path;
+        req.getSession().setAttribute(Path.CURRENT_PATH, path);
+        return CommandUtil.redirectCommand(Commands.USER_REG);
     }
 
-    private String doGet(HttpServletRequest request, HttpServletResponse response) {
-        LOG.trace("Forward to registration page");
-        return Path.FORWARD_USER_REGISTRATION_PAGE;
+    private String doGet(HttpServletRequest request) {
+        CommandUtil.transferStringFromSessionToRequest(request, Model.MESSAGE);
+        LOG.trace("Path: "+CommandUtil.getPath(request));
+        return CommandUtil.getPath(request);
     }
 }

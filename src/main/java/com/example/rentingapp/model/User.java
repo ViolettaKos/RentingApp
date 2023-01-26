@@ -1,10 +1,9 @@
-package com.example.project.model;
+package com.example.rentingapp.model;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 
-public class User implements Serializable {
+public class User extends Entity {
 
     private String role;
 
@@ -24,7 +23,8 @@ public class User implements Serializable {
 
     private int money;
 
-    public User(String fn, String ln, String username, String email, String pass, String number, Role role, boolean blocked, int money) {
+    public User(String fn, String ln, String username, String email, String pass, String number, Role role,
+                boolean blocked, int money) {
         this.firstName=fn;
         this.lastName=ln;
         this.username = username;

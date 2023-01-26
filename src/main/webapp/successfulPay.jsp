@@ -73,7 +73,8 @@
     </div>
     <h1><fmt:message key="success"/></h1>
     <p><fmt:message key="received"/>;<br/> <fmt:message key="in.touch"/>!</p>
-    <form action="${pageContext.request.contextPath}/displayOrder" method="get">
+    <form action="${pageContext.request.contextPath}/controller" method="get">
+        <input type="hidden" name="command" value="show_my_orders">
         <input class="log_in_button" type="submit" value="<fmt:message key="back"/>" />
     </form>
 </div>

@@ -1,7 +1,8 @@
-package com.example.project.web.command.admin;
+package com.example.rentingapp.web.command.admin;
 
-import com.example.project.web.command.Command;
-import com.example.project.web.command.CommandType;
+
+import com.example.rentingapp.web.command.Command;
+import com.example.rentingapp.web.command.CommandType;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 

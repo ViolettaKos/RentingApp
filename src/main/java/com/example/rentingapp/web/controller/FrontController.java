@@ -1,9 +1,10 @@
-package com.example.project.web.controller;
+package com.example.rentingapp.web.controller;
 
-import com.example.project.exception.ServiceException;
-import com.example.project.web.command.CommandFactory;
-import com.example.project.web.command.CommandType;
-import com.example.project.web.command.constants.Path;
+
+import com.example.rentingapp.exception.ServiceException;
+import com.example.rentingapp.web.command.CommandFactory;
+import com.example.rentingapp.web.command.CommandType;
+import com.example.rentingapp.web.command.constants.Path;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -22,13 +23,14 @@ public class FrontController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        LOG.trace("DOGET method in controller");
         processRequest(req, resp, CommandType.GET);
     }
 
     private void processRequest(HttpServletRequest req, HttpServletResponse resp, CommandType commandType) throws ServletException, IOException {
         LOG.debug("Start proccessing request");
         LOG.trace("Parameter command -> "+req.getParameter(COMMAND));
-        String path= null;
+        String path;
         try {
             path = CommandFactory.defineCommand(req.getParameter(COMMAND)).execute(req, resp, commandType);
         } catch (ServiceException e) {
@@ -39,9 +41,11 @@ public class FrontController extends HttpServlet {
             resp.sendRedirect(Path.MAIN_PAGE);
         } else {
             if(commandType==CommandType.GET) {
+                LOG.trace("Forwarding...");
                 RequestDispatcher dispatcher=req.getRequestDispatcher(path);
                 dispatcher.forward(req, resp);
             } else if (commandType==CommandType.POST) {
+                LOG.trace("Redirecting to: "+path);
                 resp.sendRedirect(path);
             }
         }
@@ -49,6 +53,7 @@ public class FrontController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        LOG.trace("DOPOST method in controller");
         processRequest(req, resp, CommandType.POST);
     }
 }

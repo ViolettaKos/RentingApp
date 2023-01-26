@@ -1,5 +1,5 @@
 package com.example.rentingapp.exception;
 
-public class UserNotExists extends ServiceException{
-    public UserNotExists() {super(ExcConstants.NO_USER);}
+public class UserNotExistsException extends ServiceException{
+    public UserNotExistsException() {super(ExcConstants.NO_USER);}
 }

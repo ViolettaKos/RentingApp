@@ -1,4 +1,4 @@
-package com.example.project.exception;
+package com.example.rentingapp.exception;
 
 public class ServiceException extends Exception{
     public ServiceException() {}
