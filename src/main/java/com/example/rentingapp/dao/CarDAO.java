@@ -4,10 +4,9 @@ import com.example.rentingapp.exception.DAOException;
 import com.example.rentingapp.model.Car;
 
 import java.util.List;
+import java.util.Set;
 
 public interface CarDAO {
-
-    List<Car> getCars() throws DAOException;
 
     List<Car> sortCarsDB(String command, int start, int recordsPerPage) throws DAOException;
 
@@ -16,4 +15,14 @@ public interface CarDAO {
     Car getById(int id) throws DAOException;
 
     void updateAvailability(int car_id, boolean isAvailable) throws DAOException;
+
+    Set<String> getBrands() throws DAOException;
+
+    void insertCar(Car car) throws DAOException;
+
+    String getLastId() throws DAOException;
+
+    void updateCar(Car car) throws DAOException;
+
+    void deleteCar(int car_id) throws DAOException;
 }

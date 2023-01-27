@@ -4,6 +4,9 @@ public interface Fields {
 
     //////////////      DB FIELDS       ///////////////
     String LIMIT="LIMIT ?, ?";
+    String WHERE_ROLE="WHERE role=";
+    String AND=" AND ";
+    String EQ="=";
     String NUM_OF_REC="numberOfRecords";
     String ORDER_BY="ORDER BY ";
     String ASC=" ASC";
@@ -11,6 +14,9 @@ public interface Fields {
     String CURR_PAGE="currentPage";
     String REC_PER_PAGE="recordsPerPage";
     String NUM_OF_PAGES="noOfPages";
+    String BUTTON="button";
+    String TRUE="true";
+    String FALSE="false";
 
 
     //////////////      USER       ///////////////
@@ -47,4 +53,8 @@ public interface Fields {
     String IS_REJECTED="isRejected";
     String TOTAL_PRICE="total_price";
     String REASON_REJECT="reason_for_reject";
+
+    //////////////       FILE UPLOAD      ///////////////
+    String LOGO="logo";
+    String FILE="file";
 }

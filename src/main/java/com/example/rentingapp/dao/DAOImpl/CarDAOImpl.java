@@ -11,7 +11,9 @@ import org.apache.log4j.Logger;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.example.rentingapp.dao.DAOImpl.constants.CarStatements.*;
 
@@ -22,23 +24,6 @@ public class CarDAOImpl implements CarDAO {
 
     public CarDAOImpl(DataSource dataSource) {
         this.dataSource = dataSource;
-    }
-
-    @Override
-    public List<Car> getCars() throws DAOException {
-        List<Car> cars = new ArrayList<>();
-        try (Connection connection = dataSource.getConnection();
-             Statement st = connection.createStatement()) {
-            ResultSet rs = st.executeQuery(SELECT_ALL_CARS);
-            LOG.trace("Statement to select cars: " + st);
-            while (rs.next()) {
-                cars.add(newCar(rs));
-            }
-        } catch (SQLException e) {
-            throw new DAOException(e);
-        }
-
-        return cars;
     }
 
     @Override
@@ -109,6 +94,85 @@ public class CarDAOImpl implements CarDAO {
         } catch (SQLException e) {
             throw new DAOException(e);
         }
+    }
+
+    @Override
+    public Set<String> getBrands() throws DAOException {
+        Set<String> brands = new HashSet<>();
+        try (Connection connection = dataSource.getConnection();
+             Statement st = connection.createStatement()) {
+            ResultSet rs = st.executeQuery(SELECT_BRANDS);
+            while (rs.next()) {
+                brands.add(rs.getString(BRAND));
+            }
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+        return brands;
+    }
+
+    @Override
+    public void insertCar(Car car) throws DAOException {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(INSERT_CAR)) {
+            prepareStForInsert(car, ps);
+            ps.execute();
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+    }
+
+    @Override
+    public String getLastId() throws DAOException {
+        String id = null;
+        try (Connection connection = dataSource.getConnection();
+             Statement st = connection.createStatement()) {
+            ResultSet rs = st.executeQuery(SELECT_LAST_ID);
+            while (rs.next()) {
+                id=rs.getString(1);
+            }
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+        LOG.trace("Last id: "+id);
+        return id;
+    }
+
+    @Override
+    public void updateCar(Car car) throws DAOException {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(UPDATE_BY_ID_CAR)) {
+            prepareStForUpdate(car, ps);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+    }
+
+    @Override
+    public void deleteCar(int car_id) throws DAOException {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(DELETE_CAR)) {
+            ps.setInt(1, car_id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+    }
+
+    private void prepareStForUpdate(Car car, PreparedStatement ps) throws SQLException {
+        ps.setString(1, car.getBrand());
+        ps.setString(2, car.getQuality_class());
+        ps.setString(3, car.getName());
+        ps.setInt(4,car.getPrice());
+        ps.setInt(5, car.getId());
+    }
+
+    private void prepareStForInsert(Car car, PreparedStatement ps) throws SQLException {
+        ps.setString(1, car.getBrand());
+        ps.setString(2, car.getQuality_class());
+        ps.setString(3, car.getName());
+        ps.setInt(4, car.getPrice());
     }
 
     private Car newCar(ResultSet rs) throws SQLException {

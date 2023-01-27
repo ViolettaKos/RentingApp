@@ -15,7 +15,7 @@
     <div class="pagination p12" style="margin-top: 30px;">
         <ul>
             <c:if test="${requestScope.currentPage != 1}">
-                <a href="controller?command=show_cars&sort=${param.sort}&recordsPerPage=${requestScope.recordsPerPage}&currentPage=${requestScope.currentPage-1}">
+                <a href="controller?command=${requestScope.command}&sort=${param.sort}&recordsPerPage=${requestScope.recordsPerPage}&currentPage=${requestScope.currentPage-1}">
                     <li><fmt:message key="previous"/></li>
                 </a>
             </c:if>
@@ -27,7 +27,7 @@
                                 ${i}</a>
                     </c:when>
                     <c:otherwise>
-                        <a href="controller?command=show_cars&sort=${param.sort}&recordsPerPage=${requestScope.recordsPerPage}&currentPage=${i}">
+                        <a href="controller?command=${requestScope.command}&sort=${param.sort}&recordsPerPage=${requestScope.recordsPerPage}&currentPage=${i}">
                             <li>${i}</li>
                         </a>
 
@@ -36,7 +36,7 @@
             </c:forEach>
 
             <c:if test="${requestScope.currentPage lt requestScope.noOfPages}">
-                <a href="controller?command=show_cars&sort=${param.sort}&recordsPerPage=${requestScope.recordsPerPage}&currentPage=${requestScope.currentPage+1}">
+                <a href="controller?command=${requestScope.command}&sort=${param.sort}&recordsPerPage=${requestScope.recordsPerPage}&currentPage=${requestScope.currentPage+1}">
                     <li><fmt:message key="next"/></li>
                 </a>
             </c:if>

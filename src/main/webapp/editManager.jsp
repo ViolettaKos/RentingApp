@@ -39,8 +39,7 @@
 
     <form name="member-registration" action="${pageContext.request.contextPath}/controller" method="post"
           class="form-validate form-horizontal well">
-      <input type="hidden" name="command" value="edit" />
-      <c:set var="user" value="${sessionScope.logged}"/>
+      <c:set var="user" value="${requestScope.manager}"/>
       <fieldset>
         <div class="form-group">
           <label><fmt:message key="first_name"/> *</label>
@@ -85,6 +84,8 @@
         </div>
         <div class="d-flex justify-content-between align-items-center">
           <div class="form-group d-flex justify-content-start">
+            <input type="hidden" name="command" value="edit_manager">
+            <input type="hidden" name="login" value="${user.username}">
             <button type="submit" class="submit"><fmt:message key="btn.submit"/></button>
           </div>
         </div>

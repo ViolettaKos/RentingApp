@@ -10,20 +10,11 @@ import org.apache.log4j.Logger;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 
 public class CarsServiceImpl implements CarsService {
     private static final Logger LOG = Logger.getLogger(CarsServiceImpl.class);
     private final CarDAO carDAO = AbstractDAO.getInstance().getCarDAO();
-
-    @Override
-    public List<Car> getCars() throws ServiceException {
-        LOG.trace("getCars method");
-        try {
-            return carDAO.getCars();
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-    }
 
     @Override
     public List<Car> sortCars(String command, int currentPage, int recordsPerPage) throws ServiceException {
@@ -67,6 +58,53 @@ public class CarsServiceImpl implements CarsService {
             carDAO.updateAvailability(car_id, isAvailable);
         } catch (DAOException e) {
             LOG.trace("Error in updating car");
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public Set<String> getBrands() throws ServiceException {
+        try {
+            return carDAO.getBrands();
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public void addCar(Car car) throws ServiceException {
+        try {
+           carDAO.insertCar(car);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public String getLastId() throws ServiceException {
+        try {
+            return carDAO.getLastId();
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public void updateCar(Car car) throws ServiceException {
+        try {
+            carDAO.updateCar(car);
+        } catch (DAOException e) {
+            LOG.trace("Error in updating car");
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public void deleteCarById(int car_id) throws ServiceException {
+        try {
+            carDAO.deleteCar(car_id);
+        } catch (DAOException e) {
+            LOG.trace("Error in deleting car");
             throw new ServiceException(e);
         }
     }

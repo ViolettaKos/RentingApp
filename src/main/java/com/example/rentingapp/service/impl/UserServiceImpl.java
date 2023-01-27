@@ -13,6 +13,8 @@ import com.example.rentingapp.utils.HashingPassword;
 import com.example.rentingapp.utils.Validator;
 import org.apache.log4j.Logger;
 
+import java.util.List;
+
 public class UserServiceImpl implements UserService {
 
     private static final Logger LOG = Logger.getLogger(UserServiceImpl.class);
@@ -86,6 +88,41 @@ public class UserServiceImpl implements UserService {
             return userDAO.changeAmount(amount, login);
         } catch (DAOException e) {
             LOG.error("Cannot add money: " + e);
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<User> sortUsers(String command, int currentPage, int recordsPerPage) throws ServiceException {
+        LOG.trace("sortUsers method");
+        int start=currentPage*recordsPerPage-recordsPerPage;
+        LOG.trace("Start parameter: "+start);
+        try {
+            return userDAO.sortUsersDB(command, start, recordsPerPage);
+        } catch (DAOException e) {
+            LOG.trace("Error in sorting users");
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public int getNumberOfRows(String command) throws ServiceException {
+        LOG.trace("getNumberOfRows method");
+        try {
+            return userDAO.getNumberOfRows(command);
+        } catch (DAOException e) {
+            LOG.trace("Error in getting number of rows");
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public void updateStatus(String login, boolean action) throws ServiceException {
+        LOG.trace("updateStatus method");
+        try {
+            userDAO.updateStatus(login, action);
+        } catch (DAOException e) {
+            LOG.trace("Error in updateStatus");
             throw new ServiceException(e);
         }
     }

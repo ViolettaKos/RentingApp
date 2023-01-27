@@ -16,4 +16,9 @@ public interface UserStatements {
 
     String UPDATE_MONEY_PLUS =
             "UPDATE user SET money=IF(user.money IS NULL OR money = '', ? ,money + ?) WHERE login=?";
+    String SORT_USERS="SELECT * FROM user %s";
+    String GET_NUMBER_OF_RECORDS_USER =
+            "SELECT COUNT(user_id) AS numberOfRecords FROM USER %s";
+    String UPDATE_STATUS =
+            "UPDATE user SET blocked=? WHERE login=?";
 }

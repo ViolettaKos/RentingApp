@@ -7,6 +7,7 @@ import com.example.rentingapp.web.command.CommandType;
 import com.example.rentingapp.web.command.constants.Path;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import org.apache.log4j.Logger;
 import java.io.IOException;
 
 @WebServlet("/controller")
+@MultipartConfig
 public class FrontController extends HttpServlet {
 
     private static final Logger LOG = Logger.getLogger(FrontController.class);

@@ -25,4 +25,19 @@ public interface Path {
     String PROFILE_PAGE = "profilePage.jsp";
     String EDIT_PAGE="editProfile.jsp";
     String MY_ORDERS="myOrders.jsp";
+
+    ////////////////////           ADMIN           ////////////////////
+    String ADMIN_CARS_PAGE="adminCars.jsp";
+    String ADMIN_USERS_PAGE="adminUsers.jsp";
+    String ADMIN_MNG_PAGE="adminManagers.jsp";
+    String ADD_CAR_PAGE="addCar.jsp";
+    String ADD_MNG_PAGE="addManager.jsp";
+    String EDIT_CAR_PAGE="editCar.jsp";
+    String EDIT_MANAGER_PAGE="editManager.jsp";
+
+
+    ////////////////////           IMG UPLOAD           ////////////////////
+    String BRAND_IMG="c:\\Users\\suraw\\IdeaProjects\\RentingApp\\src\\main\\webapp\\img\\brands\\";
+    String CAR_IMG="c:\\Users\\suraw\\IdeaProjects\\RentingApp\\src\\main\\webapp\\img\\cars\\";
+
 }

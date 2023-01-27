@@ -3,6 +3,7 @@ package com.example.rentingapp.dao.DAOImpl;
 
 import com.example.rentingapp.dao.UserDAO;
 import com.example.rentingapp.exception.DAOException;
+import com.example.rentingapp.model.Car;
 import com.example.rentingapp.model.User;
 import org.apache.log4j.Logger;
 
@@ -11,8 +12,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import static com.example.rentingapp.dao.DAOImpl.constants.CarStatements.GET_NUMBER_OF_RECORDS_CAR;
+import static com.example.rentingapp.dao.DAOImpl.constants.CarStatements.SORT_CARS;
 import static com.example.rentingapp.dao.DAOImpl.constants.Fields.*;
 import static com.example.rentingapp.dao.DAOImpl.constants.UserStatements.*;
 
@@ -70,7 +75,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public boolean checkIfExists(String username) throws DAOException {
         try (Connection connection=dataSource.getConnection();
-             PreparedStatement ps= connection.prepareStatement(SELECT_USER_BY_LOGIN);) {
+             PreparedStatement ps= connection.prepareStatement(SELECT_USER_BY_LOGIN)) {
             ps.setString(1, username);
             LOG.trace("Statement to get user from database by login: " + ps.toString());
             ResultSet rs = ps.executeQuery();
@@ -98,9 +103,62 @@ public class UserDAOImpl implements UserDAO {
         return true;
     }
 
+    @Override
+    public List<User> sortUsersDB(String command, int start, int recordsPerPage) throws DAOException {
+        LOG.trace("sortUsersDB method");
+        List<User> sortedUsers = new ArrayList<>();
+        command =command + " " + LIMIT;
+        LOG.trace("Command with limit: " + command);
+        try ( Connection connection = dataSource.getConnection();
+              PreparedStatement ps = connection.prepareStatement(String.format(SORT_USERS, command))) {
+            ps.setInt(1, start);
+            ps.setInt(2, recordsPerPage);
+            LOG.trace("Statement: " + ps.toString());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                sortedUsers.add(newUser(rs));
+            }
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+        return sortedUsers;
+    }
+
+    @Override
+    public int getNumberOfRows(String filter) throws DAOException {
+        LOG.trace("getNumberOfRows method");
+        int records = 0;
+        LOG.trace("Filter: " + filter);
+        String command = String.format(GET_NUMBER_OF_RECORDS_USER, filter);
+        LOG.trace("Command: " + command);
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(command)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next())
+                records = rs.getInt(NUM_OF_REC);
+            LOG.trace("numberOfRecords: " + records);
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+        return records;
+    }
+
+    @Override
+    public void updateStatus(String login, boolean action) throws DAOException {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(UPDATE_STATUS)) {
+            ps.setBoolean(1, action);
+            ps.setString(2, login);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+    }
+
+
     private void removeMoney(int amount, String login) throws DAOException {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement ps = connection.prepareStatement(UPDATE_MONEY_MINUS);) {
+             PreparedStatement ps = connection.prepareStatement(UPDATE_MONEY_MINUS)) {
             LOG.trace("Amount of money to remove: " + amount);
             amount = Math.abs(amount);
             ps.setString(1, String.valueOf(amount));

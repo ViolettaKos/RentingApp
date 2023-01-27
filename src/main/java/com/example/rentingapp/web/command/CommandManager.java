@@ -1,9 +1,6 @@
 package com.example.rentingapp.web.command;
 
-import com.example.rentingapp.web.command.admin.ManagerRegistrCommand;
-import com.example.rentingapp.web.command.admin.ShowAdminCars;
-import com.example.rentingapp.web.command.admin.ShowAdminUsers;
-import com.example.rentingapp.web.command.admin.ShowManagersCommand;
+import com.example.rentingapp.web.command.admin.*;
 import com.example.rentingapp.web.command.base.*;
 
 import static com.example.rentingapp.web.command.constants.Commands.*;
@@ -44,11 +41,16 @@ public class CommandManager {
         commands.put(PAY_ORDER, new PayOrderCommand());
 
         //////////////      ADMIN ACTIONS       ///////////////
-        commands.put(SHOW_ADMIN_CARS, new ShowAdminCars());
-        commands.put(SHOW_ADMIN_USERS, new ShowAdminUsers());
+        commands.put(SHOW_ADMIN_CARS, new ShowAdminCarsCommand());
+        commands.put(SHOW_ADMIN_USERS, new ShowAdminUsersCommand());
         commands.put(SHOW_ADMIN_MANAGERS, new ShowManagersCommand());
-
-        commands.put("manager_ref", new ManagerRegistrCommand());
+        commands.put(MANAGER_REG, new ManagerRegistrCommand());
+        commands.put(ADD_CAR, new AddCarCommand());
+        commands.put(EDIT_CAR, new EditCarCommand());
+        commands.put(DELETE_CAR, new DeleteCarCommand());
+        commands.put(UPDATE_USER_STATUS, new UpdateUserStatusCommand());
+        commands.put(DISPLAY_INFO_MNG, new DisplayInfoManager());
+        commands.put(EDIT_MNG, new EditManagerCommand());
 
         commands.put("error", new ErrorCommand());
     }
