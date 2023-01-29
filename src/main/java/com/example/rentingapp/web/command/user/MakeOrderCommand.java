@@ -25,10 +25,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class MakeOrderCommand implements Command {
     private static final Logger LOG = Logger.getLogger(MakeOrderCommand.class);
     private final Validator validator=new Validator();
     private final EmailSender emailSender;
+    private static final String NOT_AVAILABLE="not.available";
     public MakeOrderCommand(EmailContext emailContext) {
         emailSender=emailContext.getEmailSender();
     }
@@ -55,15 +60,24 @@ public class MakeOrderCommand implements Command {
 
             validator.checkAge(age);
             validator.checkDate(from, to);
-            long days=validator.countDays(from, to);
+            long days=countDays(from, to);
             int total_price= (int) (days*price);
             Order order=new Order(login, false, false, total_price, car_id, from, to, days, option, "");
             OrderService orderService = ServiceFactory.getOrderService();
+            CarsService carsService=ServiceFactory.getCarsService();
+
+            if(carsService.getCarById(String.valueOf(car_id)).isAvailable()) {
+                // #todo fix all this, think about when car will be available
             orderService.putOrder(order);
             sendConfirmation(user);
-
-            CarsService carsService=ServiceFactory.getCarsService();
-            carsService.updateAvailability(car_id, false);
+            carsService.updateAvailability(car_id, false); }
+            else {
+                LOG.trace("Car is not available");
+                req.getSession().setAttribute(Model.MESSAGE, NOT_AVAILABLE);
+                path= Path.ORDER_PAGE;
+                req.getSession().setAttribute(Path.CURRENT_PATH, path);
+                return path;
+            }
 
         } catch (NotAdultException | IncorrectDataException e) {
             LOG.trace("Error in executing command");
@@ -83,5 +97,22 @@ public class MakeOrderCommand implements Command {
         CommandUtil.transferStringFromSessionToRequest(req, Model.MESSAGE);
         LOG.trace("Path: "+CommandUtil.getPath(req));
         return CommandUtil.getPath(req);
+    }
+
+    public long countDays(String from, String to) throws IncorrectDataException {
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        long days;
+        if(from.equals(to)) {
+            return 1;
+        } else {
+            try {
+                Date fromDate=sdf.parse(from);
+                Date toDate=sdf.parse(to);
+                days=toDate.getTime()-fromDate.getTime();
+            } catch (ParseException e) {
+                LOG.trace("Exception while parsing dates");
+                throw new IncorrectDataException();
+            }
+            return days/1000/60/60/24; }
     }
 }

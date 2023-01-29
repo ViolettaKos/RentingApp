@@ -82,23 +82,6 @@ public final class Validator {
         }
     }
 
-    public long countDays(String from, String to) throws IncorrectDataException {
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-        long days;
-        if(from.equals(to)) {
-            return 1;
-        } else {
-            try {
-                Date fromDate=sdf.parse(from);
-                Date toDate=sdf.parse(to);
-                days=toDate.getTime()-fromDate.getTime();
-            } catch (ParseException e) {
-                LOG.trace("Exception while parsing dates");
-                throw new IncorrectDataException();
-            }
-            return days/1000/60/60/24; }
-    }
-
     public boolean isEnoughMoney(int amount, int user_money) {
         return user_money>=amount;
     }

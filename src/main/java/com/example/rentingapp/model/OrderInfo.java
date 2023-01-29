@@ -9,7 +9,7 @@ public class OrderInfo {
 
     private int car_id;
     private String login;
-    private Date from, to;
+    private String from, to;
     private int total_days;
     private boolean option, isPayed, isRejected, isReturned;
     private String brand, name, quality_class;
@@ -20,6 +20,10 @@ public class OrderInfo {
 
     private String comment;
 
+    public OrderInfo() {
+
+    }
+
     public int getTotal_price() {
         return total_price;
     }
@@ -28,7 +32,7 @@ public class OrderInfo {
         this.total_price = total_price;
     }
 
-    public OrderInfo(int order_id, int car_id, String login, Date from, Date to, int total_days, boolean option,
+    public OrderInfo(int order_id, int car_id, String login,String from, String to, int total_days, boolean option,
                      boolean isPayed, boolean isRejected, boolean isReturned, String brand, String name, String quality_class, int car_price,
                      int total_price, String comment) {
         this.order_id = order_id;
@@ -97,19 +101,19 @@ public class OrderInfo {
         this.login = login;
     }
 
-    public Date getFrom() {
+    public String getFrom() {
         return from;
     }
 
-    public void setFrom(Date from) {
+    public void setFrom(String from) {
         this.from = from;
     }
 
-    public Date getTo() {
+    public String getTo() {
         return to;
     }
 
-    public void setTo(Date to) {
+    public void setTo(String to) {
         this.to = to;
     }
 

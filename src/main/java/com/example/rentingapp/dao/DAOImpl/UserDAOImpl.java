@@ -108,12 +108,10 @@ public class UserDAOImpl implements UserDAO {
         LOG.trace("sortUsersDB method");
         List<User> sortedUsers = new ArrayList<>();
         command =command + " " + LIMIT;
-        LOG.trace("Command with limit: " + command);
         try ( Connection connection = dataSource.getConnection();
               PreparedStatement ps = connection.prepareStatement(String.format(SORT_USERS, command))) {
             ps.setInt(1, start);
             ps.setInt(2, recordsPerPage);
-            LOG.trace("Statement: " + ps.toString());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 sortedUsers.add(newUser(rs));
@@ -130,13 +128,11 @@ public class UserDAOImpl implements UserDAO {
         int records = 0;
         LOG.trace("Filter: " + filter);
         String command = String.format(GET_NUMBER_OF_RECORDS_USER, filter);
-        LOG.trace("Command: " + command);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(command)) {
             ResultSet rs = ps.executeQuery();
             if (rs.next())
                 records = rs.getInt(NUM_OF_REC);
-            LOG.trace("numberOfRecords: " + records);
         } catch (SQLException e) {
             throw new DAOException(e);
         }

@@ -37,6 +37,26 @@ public class OrderDAOImpl implements OrderDAO {
         }
     }
 
+//    @Override
+//    public void insertOrder(Order order) throws DAOException {
+//        try (Connection connection = dataSource.getConnection()) {
+//            connection.setAutoCommit(false);
+//            try {
+//                PreparedStatement ps = connection.prepareStatement(INSERT_ORDER);
+//                prepareStForInsert(order, ps);
+//                ps.execute();
+//                connection.commit();
+//            } catch (SQLException e) {
+//                connection.rollback();
+//                throw new DAOException(e);
+//            } finally {
+//                connection.setAutoCommit(true);
+//            }
+//        } catch (SQLException e) {
+//            throw new DAOException(e);
+//        }
+//    }
+
     @Override
     public List<OrderInfo> getInfoOrderByLogin(String username) throws DAOException {
         List<OrderInfo> orderInfos = new ArrayList<>();
@@ -166,8 +186,8 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     private OrderInfo newOrderInfo(ResultSet rs) throws SQLException {
-        return new OrderInfo(rs.getInt(ORDER_ID), rs.getInt(CAR_ID), rs.getString(LOGIN), rs.getDate(FROM),
-                rs.getDate(TO), rs.getInt(TOTAL_DAYS), rs.getBoolean(OPTION), rs.getBoolean(IS_PAYED),
+        return new OrderInfo(rs.getInt(ORDER_ID), rs.getInt(CAR_ID), rs.getString(LOGIN), rs.getString(FROM),
+                rs.getString(TO), rs.getInt(TOTAL_DAYS), rs.getBoolean(OPTION), rs.getBoolean(IS_PAYED),
                 rs.getBoolean(IS_REJECTED), rs.getBoolean(AVAILABLE), rs.getString(BRAND), rs.getString(NAME),
                 rs.getString(QUALITY), rs.getInt(PRICE), rs.getInt(TOTAL_PRICE), rs.getString(REASON_REJECT));
     }

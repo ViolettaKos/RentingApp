@@ -51,6 +51,7 @@ public interface Fields {
     String TOTAL_DAYS="total_days";
     String IS_PAYED="isPayed";
     String IS_REJECTED="isRejected";
+    String IS_AVAILABLE="isAvailable";
     String TOTAL_PRICE="total_price";
     String REASON_REJECT="reason_for_reject";
 
