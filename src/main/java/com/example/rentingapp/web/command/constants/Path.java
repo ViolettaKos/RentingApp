@@ -11,6 +11,7 @@ public interface Path {
     String ERROR_PAGE = "errorPage.jsp";
     String SIGN_UP_PAGE = "signUp.jsp";
     String LOGIN_PAGE = "login.jsp";
+    String CONTACTS_PAGE="contactsPage.jsp";
 
     ////////////////////           CARS           ////////////////////
     String BOOK_PAGE="bookPage.jsp";
@@ -25,6 +26,7 @@ public interface Path {
     String PROFILE_PAGE = "profilePage.jsp";
     String EDIT_PAGE="editProfile.jsp";
     String MY_ORDERS="myOrders.jsp";
+    String PAYMENT_PAGE="paymentPage.jsp";
 
     ////////////////////           ADMIN           ////////////////////
     String ADMIN_CARS_PAGE="adminCars.jsp";
@@ -38,6 +40,8 @@ public interface Path {
     ////////////////////           MANAGER          ////////////////////
     String MNG_ORDERS_PAGE="managerOrders.jsp";
     String ORDER_INFO_PAGE="viewOrderInfoManager.jsp";
+    String REG_RETURN_PAGE="registerReturn.jsp";
+    String REJECT_ORDER_PAGE="rejectOrder.jsp";
 
 
     ////////////////////           IMG UPLOAD           ////////////////////

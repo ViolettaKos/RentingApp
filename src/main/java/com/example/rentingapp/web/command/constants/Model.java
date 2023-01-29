@@ -18,8 +18,5 @@ public interface Model {
     String MANAGER_DB= "'manager'";
     String DAMAGE="damage";
     String MONEY="money";
-    String EMAIL_CONTEXT="emailContext";
-
-
 
 }
