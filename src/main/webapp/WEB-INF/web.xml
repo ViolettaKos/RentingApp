@@ -26,4 +26,8 @@
             <taglib-location>/WEB-INF/custom.tld</taglib-location>
         </taglib>
     </jsp-config>
+
+    <listener>
+        <listener-class>com.example.rentingapp.web.listeners.EmailListener</listener-class>
+    </listener>
 </web-app>

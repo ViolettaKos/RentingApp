@@ -1,6 +1,7 @@
 package com.example.rentingapp.web.command.user;
 
 import static com.example.rentingapp.dao.DAOImpl.constants.Fields.*;
+import static com.example.rentingapp.web.command.constants.EmailConstants.*;
 import static com.example.rentingapp.web.command.constants.Model.LOGGED;
 
 import com.example.rentingapp.exception.IncorrectDataException;
@@ -11,6 +12,7 @@ import com.example.rentingapp.model.User;
 import com.example.rentingapp.service.CarsService;
 import com.example.rentingapp.service.OrderService;
 import com.example.rentingapp.service.ServiceFactory;
+import com.example.rentingapp.utils.EmailSender;
 import com.example.rentingapp.utils.Validator;
 import com.example.rentingapp.web.command.Command;
 import com.example.rentingapp.web.command.CommandType;
@@ -18,6 +20,7 @@ import com.example.rentingapp.web.command.CommandUtil;
 import com.example.rentingapp.web.command.constants.Commands;
 import com.example.rentingapp.web.command.constants.Model;
 import com.example.rentingapp.web.command.constants.Path;
+import com.example.rentingapp.web.listeners.EmailContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
@@ -25,6 +28,10 @@ import org.apache.log4j.Logger;
 public class MakeOrderCommand implements Command {
     private static final Logger LOG = Logger.getLogger(MakeOrderCommand.class);
     private final Validator validator=new Validator();
+    private final EmailSender emailSender;
+    public MakeOrderCommand(EmailContext emailContext) {
+        emailSender=emailContext.getEmailSender();
+    }
 
 
     @Override
@@ -53,6 +60,7 @@ public class MakeOrderCommand implements Command {
             Order order=new Order(login, false, false, total_price, car_id, from, to, days, option, "");
             OrderService orderService = ServiceFactory.getOrderService();
             orderService.putOrder(order);
+            sendConfirmation(user);
 
             CarsService carsService=ServiceFactory.getCarsService();
             carsService.updateAvailability(car_id, false);
@@ -64,6 +72,11 @@ public class MakeOrderCommand implements Command {
         }
         req.getSession().setAttribute(Path.CURRENT_PATH, path);
         return CommandUtil.redirectCommand(Commands.SHOW_MY_ORDERS);
+    }
+
+    private void sendConfirmation(User user) {
+        String body = String.format(MESSAGE_ORDER, user.getFirstName());
+        new Thread(() -> emailSender.send(user.getEmail(), TOPIC_ORDER, body)).start();
     }
 
     private String doGet(HttpServletRequest req) {

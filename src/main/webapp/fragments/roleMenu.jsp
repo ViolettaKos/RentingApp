@@ -24,7 +24,7 @@
 <c:if test="${sessionScope.role eq 'manager'}">
     <div>
       <form action="${pageContext.request.contextPath}/controller" method="get">
-        <button type="submit" name="action" value="view-orders" style="border: none; margin-left: 50px; margin-right: 20px; margin-top: 10px; background-color: #EDFCED; text-decoration: underline; font-style: italic; font-size: 18px;"><fmt:message key="orders"/></button>
+        <button type="submit" name="command" value="view-orders" style="border: none; margin-left: 50px; margin-right: 20px; margin-top: 10px; background-color: #EDFCED; text-decoration: underline; font-style: italic; font-size: 18px;"><fmt:message key="orders"/></button>
       </form>
     </div>
 </c:if>

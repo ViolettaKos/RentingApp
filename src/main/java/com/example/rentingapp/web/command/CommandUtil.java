@@ -3,6 +3,7 @@ package com.example.rentingapp.web.command;
 
 import com.example.rentingapp.exception.ServiceException;
 import com.example.rentingapp.service.CarsService;
+import com.example.rentingapp.service.OrderService;
 import com.example.rentingapp.service.ServiceFactory;
 import com.example.rentingapp.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -82,6 +83,9 @@ public class CommandUtil {
             case MANAGER: {
                 rows=getRowsManagers(req, command, currentPage, recordsPerPage);
             }
+            case ORDERS: {
+                rows=getRowsOrder(req, command, currentPage, recordsPerPage);
+            }
         }
 
         int nOfPages= (int) Math.ceil((double) rows/recordsPerPage);
@@ -89,6 +93,12 @@ public class CommandUtil {
         req.setAttribute(NUM_OF_PAGES, nOfPages);
         req.setAttribute(CURR_PAGE, currentPage);
         req.setAttribute(REC_PER_PAGE, recordsPerPage);
+    }
+
+    private static int getRowsOrder(HttpServletRequest req, String command, int currentPage, int recordsPerPage) throws ServiceException {
+        OrderService orderService=ServiceFactory.getOrderService();
+        req.setAttribute(ORDERS, orderService.sortOrders(command, currentPage, recordsPerPage));
+        return orderService.getNumberOfRows(command);
     }
 
     private static int getRowsCars(HttpServletRequest req, String command, int currentPage, int recordsPerPage) throws ServiceException {

@@ -29,6 +29,9 @@ public class Order extends Entity {
         this.comment=comment;
     }
 
+    public Order() {
+    }
+
     public String getComment() {
         return comment;
     }

@@ -40,6 +40,14 @@
             <option value="email" ${param.sort eq "email" ? "selected" : ""}><fmt:message key="email"/></option>
         </select>
     </c:if>
+    <c:if test="${param.command.equals('view-orders')}">
+        <select name="sort" class="form-control" style="width: 150px; height: 35px; border-radius: 8px; margin-left: 10px;display: inline-block" onchange='submit();'>
+            <option value="" disabled selected><fmt:message key="sort.by"/></option>
+            <option value="order_id" ${param.sort eq "order_id" ? "selected" : ""}><fmt:message key="id"/></option>
+            <option value="total_days" ${param.sort eq "total_days" ? "selected" : ""}><fmt:message key="days"/></option>
+            <option value="total_price" ${param.sort eq "total_price" ? "selected" : ""}><fmt:message key="price"/></option>
+        </select>
+    </c:if>
     </label>
     <input type="hidden" name="currentPage" value="1">
     <button type="submit" style="color: white; border-radius: 5px; background-color: green; margin-left: 20px; border: green; width: 100px; height: 30px; display: none"><fmt:message key="btn.submit"/></button>

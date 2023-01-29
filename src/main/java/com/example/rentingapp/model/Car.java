@@ -26,7 +26,6 @@ public class Car extends Entity {
     }
 
     public Car() {
-
     }
 
     public boolean isAvailable() {

@@ -44,4 +44,48 @@ public class OrderServiceImpl implements OrderService {
             throw new ServiceException(e);
         }
     }
+
+    @Override
+    public List<Order> sortOrders(String command, int currentPage, int recordsPerPage) throws ServiceException {
+        LOG.trace("sortOrders method");
+        int start=currentPage*recordsPerPage-recordsPerPage;
+        LOG.trace("Start parameter: "+start);
+        try {
+            return orderDAO.sortOrdersDB(command, start, recordsPerPage);
+        } catch (DAOException e) {
+            LOG.trace("Error in sorting cars");
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public int getNumberOfRows(String command) throws ServiceException {
+        LOG.trace("getNumberOfRows method");
+        try {
+            return orderDAO.getNumberOfRows(command);
+        } catch (DAOException e) {
+            LOG.trace("Error in getting number of rows");
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public OrderInfo getOrderInfo(int order_id) throws ServiceException {
+        LOG.trace("Entering getOrderInfo method");
+        try {
+            return orderDAO.getOrderInfo(order_id);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public void rejectOrder(int order_id, String comment) throws ServiceException {
+        LOG.trace("Entering rejectOrder method");
+        try {
+            orderDAO.rejectOrder(order_id, comment);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
 }

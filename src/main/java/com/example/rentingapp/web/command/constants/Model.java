@@ -11,9 +11,14 @@ public interface Model {
     String MESSAGE= "msg";
     String CAR="car";
     String ORDERS="orders";
+    String ORDER_INFO="orderInfo";
+    String COMMENT="comment";
     String ID="id";
     String USER_DB= "'user'";
     String MANAGER_DB= "'manager'";
+    String DAMAGE="damage";
+    String MONEY="money";
+    String EMAIL_CONTEXT="emailContext";
 
 
 

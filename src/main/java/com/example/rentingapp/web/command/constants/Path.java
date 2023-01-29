@@ -35,6 +35,10 @@ public interface Path {
     String EDIT_CAR_PAGE="editCar.jsp";
     String EDIT_MANAGER_PAGE="editManager.jsp";
 
+    ////////////////////           MANAGER          ////////////////////
+    String MNG_ORDERS_PAGE="managerOrders.jsp";
+    String ORDER_INFO_PAGE="viewOrderInfoManager.jsp";
+
 
     ////////////////////           IMG UPLOAD           ////////////////////
     String BRAND_IMG="c:\\Users\\suraw\\IdeaProjects\\RentingApp\\src\\main\\webapp\\img\\brands\\";

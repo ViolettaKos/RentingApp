@@ -7,7 +7,12 @@ import static com.example.rentingapp.web.command.constants.Commands.*;
 
 import com.example.rentingapp.web.command.car.ShowCarCommand;
 import com.example.rentingapp.web.command.car.ShowCarsCommand;
+import com.example.rentingapp.web.command.manager.DisplayOrderCommand;
+import com.example.rentingapp.web.command.manager.RegisterReturnCommand;
+import com.example.rentingapp.web.command.manager.RejectOrderCommand;
+import com.example.rentingapp.web.command.manager.ViewOrdersCommand;
 import com.example.rentingapp.web.command.user.*;
+import com.example.rentingapp.web.listeners.EmailContext;
 import org.apache.log4j.Logger;
 
 import java.util.HashMap;
@@ -17,6 +22,7 @@ public class CommandManager {
 
     private static final Logger LOG = Logger.getLogger(CommandManager.class);
     private final Map<String, Command> commands;
+    private static final EmailContext EMAIL_CONTEXT=EmailContext.getEmailContext();
 
     public CommandManager() {
 
@@ -24,7 +30,7 @@ public class CommandManager {
 
         //////////////      ENTRY POINT       ///////////////
         commands.put(LOGIN, new LoginCommand());
-        commands.put(USER_REG, new UserRegistrCommand());
+        commands.put(USER_REG, new UserRegistrCommand(EMAIL_CONTEXT));
         commands.put(LOG_OUT, new LogOutCommand());
 
         //////////////      PROFILE ACTIONS       ///////////////
@@ -37,8 +43,8 @@ public class CommandManager {
         commands.put(SHOW_CAR, new ShowCarCommand());
 
         //////////////      ORDER ACTIONS       ///////////////
-        commands.put(MAKE_ORDER, new MakeOrderCommand());
-        commands.put(PAY_ORDER, new PayOrderCommand());
+        commands.put(MAKE_ORDER, new MakeOrderCommand(EMAIL_CONTEXT));
+        commands.put(PAY_ORDER, new PayOrderCommand(EMAIL_CONTEXT));
 
         //////////////      ADMIN ACTIONS       ///////////////
         commands.put(SHOW_ADMIN_CARS, new ShowAdminCarsCommand());
@@ -48,11 +54,17 @@ public class CommandManager {
         commands.put(ADD_CAR, new AddCarCommand());
         commands.put(EDIT_CAR, new EditCarCommand());
         commands.put(DELETE_CAR, new DeleteCarCommand());
-        commands.put(UPDATE_USER_STATUS, new UpdateUserStatusCommand());
+        commands.put(UPDATE_USER_STATUS, new UpdateUserStatusCommand(EMAIL_CONTEXT));
         commands.put(DISPLAY_INFO_MNG, new DisplayInfoManager());
         commands.put(EDIT_MNG, new EditManagerCommand());
 
-        commands.put("error", new ErrorCommand());
+        //////////////      MANAGER ACTIONS       ///////////////
+        commands.put(VIEW_ORDERS, new ViewOrdersCommand());
+        commands.put(DISPLAY_ORDER, new DisplayOrderCommand());
+        commands.put(REJECT, new RejectOrderCommand(EMAIL_CONTEXT));
+        commands.put(REGISTER_RETURN, new RegisterReturnCommand(EMAIL_CONTEXT));
+
+        commands.put(ERROR, new ErrorCommand());
     }
 
     public Command defineCommand(String command) {

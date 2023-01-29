@@ -6,6 +6,7 @@ import com.example.rentingapp.model.Role;
 import com.example.rentingapp.model.User;
 import com.example.rentingapp.service.ServiceFactory;
 import com.example.rentingapp.service.UserService;
+import com.example.rentingapp.utils.EmailSender;
 import com.example.rentingapp.utils.Validator;
 import com.example.rentingapp.web.command.Command;
 import com.example.rentingapp.web.command.CommandType;
@@ -13,15 +14,22 @@ import com.example.rentingapp.web.command.CommandUtil;
 import com.example.rentingapp.web.command.constants.Commands;
 import com.example.rentingapp.web.command.constants.Model;
 import com.example.rentingapp.web.command.constants.Path;
+import com.example.rentingapp.web.listeners.EmailContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
+import static com.example.rentingapp.web.command.constants.Commands.COMMAND;
+import static com.example.rentingapp.web.command.constants.EmailConstants.*;
+
 
 public class UserRegistrCommand implements Command {
-
     private static final Logger LOG = Logger.getLogger(UserRegistrCommand.class);
     private final Validator validator=new Validator();
+    private final EmailSender emailSender;
+    public UserRegistrCommand(EmailContext emailContext) {
+        emailSender=emailContext.getEmailSender();
+    }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, CommandType commandType) throws ServiceException {
@@ -51,6 +59,7 @@ public class UserRegistrCommand implements Command {
             UserService userService = ServiceFactory.getUserService();
             userService.checkIfExists(username);
             userService.add(user);
+            sendGreetings(user, req);
             req.getSession().setAttribute(Fields.ROLE, user.getRole());
             req.getSession().setAttribute(Model.LOGGED, user);
 
@@ -62,10 +71,20 @@ public class UserRegistrCommand implements Command {
         req.getSession().setAttribute(Path.CURRENT_PATH, path);
         return CommandUtil.redirectCommand(Commands.USER_REG);
     }
-
     private String doGet(HttpServletRequest request) {
         CommandUtil.transferStringFromSessionToRequest(request, Model.MESSAGE);
         LOG.trace("Path: "+CommandUtil.getPath(request));
         return CommandUtil.getPath(request);
     }
+
+    private void sendGreetings(User user, HttpServletRequest req) {
+        String body = String.format(MESSAGE_REGISTER, user.getFirstName(), getURL(req));
+        new Thread(() -> emailSender.send(user.getEmail(), TOPIC_REGISTER, body)).start();
+    }
+
+    private static String getURL(HttpServletRequest request) {
+        return request.getRequestURL().toString()+MARK+
+                COMMAND+EQUAL+Commands.SHOW_CARS;
+    }
+
 }
