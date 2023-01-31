@@ -8,5 +8,5 @@ public class RegexConstants {
             "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){2,18}[a-zA-Z0-9]$";
 
     static final String PHONE_PATTERN =
-            "^(?:\\+38)?(?:[0-9] ?){9}[0-9]$";
+            "^\\+?3?8?(0\\d{9})$";
 }

@@ -20,8 +20,15 @@ public class UserServiceImpl implements UserService {
     private static final Logger LOG = Logger.getLogger(UserServiceImpl.class);
 
     private final Validator validator = new Validator();
-    private final UserDAO userDAO = AbstractDAO.getInstance().getUserDAO();
+//    private final UserDAO userDAO = AbstractDAO.getInstance().getUserDAO();
+    private final UserDAO userDAO;
 
+    public UserServiceImpl() {
+        userDAO=AbstractDAO.getInstance().getUserDAO();
+    }
+    public UserServiceImpl(UserDAO userDAO) {
+        this.userDAO=userDAO;
+    }
 
     @Override
     public void add(User user) throws ServiceException {

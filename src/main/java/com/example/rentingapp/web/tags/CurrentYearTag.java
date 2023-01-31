@@ -11,7 +11,8 @@ public class CurrentYearTag extends SimpleTagSupport {
     @Override
     public void doTag() throws IOException {
         JspWriter out= getJspContext().getOut();
-        out.print(LocalDate.now().getYear());
+        String year= String.valueOf(LocalDate.now().getYear());
+        out.print(year);
     }
 
 }
