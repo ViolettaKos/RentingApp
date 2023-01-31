@@ -2,6 +2,7 @@ package com.example.rentingapp.service.impl;
 
 import com.example.rentingapp.dao.AbstractDAO;
 import com.example.rentingapp.dao.CarDAO;
+import com.example.rentingapp.dao.UserDAO;
 import com.example.rentingapp.exception.DAOException;
 import com.example.rentingapp.exception.ServiceException;
 import com.example.rentingapp.model.Car;
@@ -14,7 +15,13 @@ import java.util.Set;
 
 public class CarsServiceImpl implements CarsService {
     private static final Logger LOG = Logger.getLogger(CarsServiceImpl.class);
-    private final CarDAO carDAO = AbstractDAO.getInstance().getCarDAO();
+    private final CarDAO carDAO;
+    public CarsServiceImpl() {
+        carDAO=AbstractDAO.getInstance().getCarDAO();
+    }
+    public CarsServiceImpl(CarDAO carDAO) {
+        this.carDAO=carDAO;
+    }
 
     @Override
     public List<Car> sortCars(String command, int currentPage, int recordsPerPage) throws ServiceException {

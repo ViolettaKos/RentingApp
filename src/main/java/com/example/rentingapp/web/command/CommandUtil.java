@@ -34,7 +34,7 @@ public class CommandUtil {
         return base + stringJoiner;
     }
 
-    public static void transferStringFromSessionToRequest(HttpServletRequest request, String attributeName) {
+    public static void setAttrToReq(HttpServletRequest request, String attributeName) {
         LOG.trace("attributeName: "+attributeName);
         String attributeValue = (String) request.getSession().getAttribute(attributeName);
         LOG.trace("attributeValue: "+attributeValue);

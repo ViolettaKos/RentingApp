@@ -1,6 +1,6 @@
 package com.example.rentingapp.web.command.user;
 
-import com.example.rentingapp.dao.DAOImpl.constants.Fields;
+import static com.example.rentingapp.dao.DAOImpl.constants.Fields.*;
 import com.example.rentingapp.exception.*;
 import com.example.rentingapp.model.Role;
 import com.example.rentingapp.model.User;
@@ -27,6 +27,7 @@ public class UserRegistrCommand implements Command {
     private static final Logger LOG = Logger.getLogger(UserRegistrCommand.class);
     private final Validator validator=new Validator();
     private final EmailSender emailSender;
+    private final static String REPEATED_PASS="repeated_pass";
     public UserRegistrCommand(EmailContext emailContext) {
         emailSender=emailContext.getEmailSender();
     }
@@ -38,19 +39,13 @@ public class UserRegistrCommand implements Command {
     }
 
     private String doPost(HttpServletRequest req) throws ServiceException {
-        String firstname = req.getParameter("firstname");
-        LOG.trace("Request parameter: fn --> " + firstname);
-        String lastname = req.getParameter("lastname");
-        LOG.trace("Request parameter: ln --> " + lastname);
-        String username = req.getParameter("username");
-        LOG.trace("Request parameter: username --> " + username);
-        String pass = req.getParameter("pass");
-        LOG.trace("Request parameter: pass --> " + pass);
-        String repeated_pass = req.getParameter("repeated_pass");
-        LOG.trace("Request parameter: repeated_pass --> " + repeated_pass);
-        String email = req.getParameter("email");
-        LOG.trace("Request parameter: email --> " + email);
-        String telephone = req.getParameter("telephone");
+        String firstname = req.getParameter(FIRST_NAME);
+        String lastname = req.getParameter(LAST_NAME);
+        String username = req.getParameter(LOGIN);
+        String pass = req.getParameter(PASS);
+        String repeated_pass = req.getParameter(REPEATED_PASS);
+        String email = req.getParameter(EMAIL);
+        String telephone = req.getParameter(TELEPHONE);
         String path=Path.PROFILE_PAGE;
         User user=new User(firstname, lastname, username, email, pass, telephone, Role.USER, false, 0);
         try {
@@ -60,7 +55,7 @@ public class UserRegistrCommand implements Command {
             userService.checkIfExists(username);
             userService.add(user);
             sendGreetings(user, req);
-            req.getSession().setAttribute(Fields.ROLE, user.getRole());
+            req.getSession().setAttribute(ROLE, user.getRole());
             req.getSession().setAttribute(Model.LOGGED, user);
 
         } catch (IncorrectDataException | IncorrectEmailException | DuplicatedLoginException | PasswordNotMatchesException e) {
@@ -72,7 +67,7 @@ public class UserRegistrCommand implements Command {
         return CommandUtil.redirectCommand(Commands.USER_REG);
     }
     private String doGet(HttpServletRequest request) {
-        CommandUtil.transferStringFromSessionToRequest(request, Model.MESSAGE);
+        CommandUtil.setAttrToReq(request, Model.MESSAGE);
         LOG.trace("Path: "+CommandUtil.getPath(request));
         return CommandUtil.getPath(request);
     }

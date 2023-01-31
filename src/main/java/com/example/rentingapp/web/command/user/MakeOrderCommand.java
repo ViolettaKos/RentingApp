@@ -94,7 +94,7 @@ public class MakeOrderCommand implements Command {
     }
 
     private String doGet(HttpServletRequest req) {
-        CommandUtil.transferStringFromSessionToRequest(req, Model.MESSAGE);
+        CommandUtil.setAttrToReq(req, Model.MESSAGE);
         LOG.trace("Path: "+CommandUtil.getPath(req));
         return CommandUtil.getPath(req);
     }

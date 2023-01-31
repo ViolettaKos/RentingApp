@@ -44,25 +44,25 @@
             <fieldset>
                 <div class="form-group">
                     <label><fmt:message key="first_name"/> *</label>
-                    <input type="text" class="form-control" required name="firstname"
+                    <input type="text" class="form-control" required name="first_name"
                            pattern="^[A-Za-zА-ЩЬЮЯҐІЇЄа-щьюяґіїє'\- ]{1,30}"
                            title="<fmt:message key="register.name"/>">
                 </div>
                 <div class="form-group">
                     <label><fmt:message key="last_name"/> *</label>
-                    <input type="text" class="form-control" required name="lastname"
+                    <input type="text" class="form-control" required name="last_name"
                            pattern="^[A-Za-zА-ЩЬЮЯҐІЇЄа-щьюяґіїє'\- ]{1,30}"
                            title="<fmt:message key="register.name"/>">
                 </div>
                 <div class="form-group">
                     <label><fmt:message key="username"/> *</label>
-                    <input type="text" class="form-control" required name="username"
+                    <input type="text" class="form-control" required name="login"
                            pattern="^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){2,18}[a-zA-Z0-9]$"
                            title="<fmt:message key="register.login"/>">
                 </div>
                 <div class="form-group">
                     <label><fmt:message key="password"/> *</label>
-                    <input type="password" class="form-control" required name="pass"
+                    <input type="password" class="form-control" required name="password"
                            pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$"
                            title="<fmt:message key="register.login"/>">
                 </div>

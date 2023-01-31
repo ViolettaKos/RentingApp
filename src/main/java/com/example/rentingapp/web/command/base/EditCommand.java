@@ -1,7 +1,6 @@
 package com.example.rentingapp.web.command.base;
 
 import com.example.rentingapp.exception.*;
-import com.example.rentingapp.model.Role;
 import com.example.rentingapp.model.User;
 import com.example.rentingapp.service.ServiceFactory;
 import com.example.rentingapp.service.UserService;
@@ -66,7 +65,7 @@ public class EditCommand implements Command {
 
 
     private String doGet(HttpServletRequest request) {
-        CommandUtil.transferStringFromSessionToRequest(request, Model.MESSAGE);
+        CommandUtil.setAttrToReq(request, Model.MESSAGE);
         LOG.trace("Path: " + CommandUtil.getPath(request));
         return CommandUtil.getPath(request);
     }

@@ -21,6 +21,9 @@ import org.apache.log4j.Logger;
 
 public class LoginCommand implements Command {
     private static final Logger LOG = Logger.getLogger(LoginCommand.class);
+    private final UserService userService;
+    public LoginCommand() { this.userService=ServiceFactory.getUserService();}
+    public LoginCommand(UserService userService) {this.userService=userService;}
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, CommandType commandType) {
         LOG.debug("Start executing Command");
@@ -32,7 +35,6 @@ public class LoginCommand implements Command {
         String pass=request.getParameter(PASS);
         LOG.trace("Login: "+login+" pass: "+pass);
         try {
-            UserService userService = ServiceFactory.getUserService();
             User user=userService.login(login, pass);
             request.getSession().setAttribute(Model.LOGGED, user);
             request.getSession().setAttribute(Fields.ROLE, user.getRole());
@@ -45,8 +47,8 @@ public class LoginCommand implements Command {
     }
 
     private String doGet(HttpServletRequest request) {
-        transferStringFromSessionToRequest(request, LOGIN);
-        transferStringFromSessionToRequest(request, Model.MESSAGE);
+        setAttrToReq(request, LOGIN);
+        setAttrToReq(request, Model.MESSAGE);
         return Path.LOGIN_PAGE;
     }
 }

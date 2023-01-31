@@ -1,7 +1,6 @@
 package com.example.rentingapp.web.command.admin;
 
 
-import com.example.rentingapp.dao.DAOImpl.constants.Fields;
 import com.example.rentingapp.exception.*;
 import com.example.rentingapp.model.Role;
 import com.example.rentingapp.model.User;
@@ -11,10 +10,8 @@ import com.example.rentingapp.utils.Validator;
 import com.example.rentingapp.web.command.Command;
 import com.example.rentingapp.web.command.CommandType;
 import com.example.rentingapp.web.command.CommandUtil;
-import com.example.rentingapp.web.command.constants.Commands;
 import com.example.rentingapp.web.command.constants.Model;
 import com.example.rentingapp.web.command.constants.Path;
-import com.example.rentingapp.web.command.user.UserRegistrCommand;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
@@ -66,7 +63,7 @@ public class ManagerRegistrCommand implements Command {
     }
 
     private String doGet(HttpServletRequest request) {
-        CommandUtil.transferStringFromSessionToRequest(request, Model.MESSAGE);
+        CommandUtil.setAttrToReq(request, Model.MESSAGE);
         LOG.trace("Path: "+CommandUtil.getPath(request));
         return CommandUtil.getPath(request);
     }
