@@ -27,7 +27,7 @@ public interface Constants {
 
     //////////////////////////        ORDER          //////////////////////////
 
-    String FROM_VAL= "2023-12-31";
+    String FROM_VAL= "2023-01-03";
     String TO_VAL="2023-01-06";
     int ORDER_ID_VAL=3;
     int TOTAL_PRICE_VAL=550;

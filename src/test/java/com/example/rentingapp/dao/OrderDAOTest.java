@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.example.rentingapp.constants.Constants.*;
@@ -156,6 +157,64 @@ public class OrderDAOTest {
         try (PreparedStatement ps = prepareStatements(dataSource)) {
             when(ps.executeQuery()).thenThrow(new SQLException());
             assertThrows(DAOException.class, () -> orderDAO.getInfoOrderByLogin(LOGIN_VAL));
+        }
+    }
+
+    @Test
+    void getOrderByIdTest() throws SQLException, DAOException {
+        try (PreparedStatement ps = prepareStatements(dataSource)) {
+            when(ps.executeQuery()).thenReturn(rs);
+            prepareResults(rs);
+            assertEquals(createOrder(), orderDAO.getOrderById(ORDER_ID_VAL));
+        }
+    }
+
+    @Test
+    void getOrderByIdEXC() throws SQLException {
+        try (PreparedStatement ps = prepareStatements(dataSource)) {
+            when(ps.executeQuery()).thenThrow(new SQLException());
+            prepareResults(rs);
+            assertThrows(DAOException.class, () -> orderDAO.getOrderById(ORDER_ID_VAL));
+        }
+    }
+
+    @Test
+    void updateReturnTest() throws SQLException {
+        try (PreparedStatement ps = prepareStatements(dataSource)) {
+            when(ps.executeUpdate()).thenReturn(1);
+            prepareResults(rs);
+            assertDoesNotThrow(() -> orderDAO.updateReturn(ORDER_ID_VAL));
+        }
+    }
+
+    @Test
+    void updateReturnEXCTest() throws SQLException {
+        try (PreparedStatement ps = prepareStatements(dataSource)) {
+            when(ps.executeUpdate()).thenThrow(new SQLException());
+            assertThrows(DAOException.class, () -> orderDAO.updateReturn(ORDER_ID_VAL));
+        }
+    }
+
+    @Test
+    void getDatesByCarTest() throws SQLException, DAOException {
+        try (PreparedStatement ps = prepareStatements(dataSource)) {
+            when(ps.executeQuery()).thenReturn(rs);
+            when(rs.next()).thenReturn(true).thenReturn(false);
+            when(rs.getString(FROM)).thenReturn(FROM_VAL);
+            when(rs.getString(TO)).thenReturn(TO_VAL);
+            when(rs.getBoolean(IS_RETURNED)).thenReturn(false);
+            when(rs.getBoolean(IS_REJECTED)).thenReturn(false);
+            List<LocalDate> orders = orderDAO.getDatesByCar(CAR_ID_VAL);
+            assertEquals(4, orders.size());
+            assertEquals(FROM_VAL, orders.get(0).toString());
+        }
+    }
+
+    @Test
+    void getDatesByCarEXCTest() throws SQLException {
+        try (PreparedStatement ps = prepareStatements(dataSource)) {
+            when(ps.executeQuery()).thenThrow(new SQLException());
+            assertThrows(DAOException.class, () -> orderDAO.getDatesByCar(CAR_ID_VAL));
         }
     }
 
