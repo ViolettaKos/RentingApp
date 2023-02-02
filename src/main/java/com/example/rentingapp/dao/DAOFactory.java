@@ -10,9 +10,6 @@ import org.apache.log4j.Logger;
 import javax.sql.DataSource;
 
 public class DAOFactory extends AbstractDAO {
-
-    private static final Logger LOG = Logger.getLogger(DAOFactory.class);
-
     private final DataSource dataSource;
 
     private UserDAO userDAO;
@@ -47,7 +44,6 @@ public class DAOFactory extends AbstractDAO {
 
     public DAOFactory(DataSource dataSource) {
         this.dataSource = dataSource;
-        LOG.trace("Datasource in constructor: "+dataSource.toString());
     }
 
 }

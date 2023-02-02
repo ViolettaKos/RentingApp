@@ -13,9 +13,6 @@ public interface CarsService {
     int getNumberOfRows(String command) throws ServiceException;
 
     Car getCarById(String parameter) throws ServiceException;
-
-    void updateAvailability(int car_id, boolean isAvailable) throws ServiceException;
-
     Set<String> getBrands() throws ServiceException;
 
     void addCar(Car car) throws ServiceException;

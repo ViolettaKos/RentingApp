@@ -9,6 +9,7 @@ import com.example.rentingapp.model.OrderInfo;
 import com.example.rentingapp.service.OrderService;
 import org.apache.log4j.Logger;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class OrderServiceImpl implements OrderService {
@@ -84,6 +85,16 @@ public class OrderServiceImpl implements OrderService {
         LOG.trace("Entering rejectOrder method");
         try {
             orderDAO.rejectOrder(order_id, comment);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<LocalDate> getDatesByCar(int car_id) throws ServiceException {
+        LOG.trace("Entering getDatesByCar method");
+        try {
+            return orderDAO.getDatesByCar(car_id);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

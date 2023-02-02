@@ -7,6 +7,7 @@ import static com.example.rentingapp.web.command.constants.Model.LOGGED;
 import com.example.rentingapp.exception.IncorrectDataException;
 import com.example.rentingapp.exception.NotAdultException;
 import com.example.rentingapp.exception.ServiceException;
+import com.example.rentingapp.model.Car;
 import com.example.rentingapp.model.Order;
 import com.example.rentingapp.model.User;
 import com.example.rentingapp.service.CarsService;
@@ -27,13 +28,14 @@ import org.apache.log4j.Logger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 public class MakeOrderCommand implements Command {
     private static final Logger LOG = Logger.getLogger(MakeOrderCommand.class);
     private final Validator validator=new Validator();
     private final EmailSender emailSender;
-    private static final String NOT_AVAILABLE="not.available";
     public MakeOrderCommand(EmailContext emailContext) {
         emailSender=emailContext.getEmailSender();
     }
@@ -47,42 +49,34 @@ public class MakeOrderCommand implements Command {
 
     private String doPost(HttpServletRequest req) throws ServiceException {
         String age=req.getParameter(AGE);
-        String from=req.getParameter(FROM);
+        String from=req.getParameter(FROM); // 14-02-2023
         String to=req.getParameter(TO);
+        LOG.trace("From: "+from);
+        LOG.trace("To: "+to);
         boolean option= Boolean.parseBoolean(req.getParameter(OPTION));
         int car_id= Integer.parseInt(req.getParameter(CAR_ID));
         User user = (User) req.getSession().getAttribute(LOGGED);
         String login=user.getUsername();
-        int price= Integer.parseInt(req.getParameter(PRICE));
 
         String path=Path.MY_ORDERS;
         try {
-
+            CarsService carsService=ServiceFactory.getCarsService();
+            Car car=carsService.getCarById(String.valueOf(car_id));
             validator.checkAge(age);
             validator.checkDate(from, to);
             long days=countDays(from, to);
-            int total_price= (int) (days*price);
-            Order order=new Order(login, false, false, total_price, car_id, from, to, days, option, "");
-            OrderService orderService = ServiceFactory.getOrderService();
-            CarsService carsService=ServiceFactory.getCarsService();
+            int total_price= (int) (days*car.getPrice());
 
-            if(carsService.getCarById(String.valueOf(car_id)).isAvailable()) {
-                // #todo fix all this, think about when car will be available
+            Order order=new Order(login, false, false, total_price, car_id, from, to, days, option, "", false);
+            OrderService orderService = ServiceFactory.getOrderService();
             orderService.putOrder(order);
             sendConfirmation(user);
-            carsService.updateAvailability(car_id, false); }
-            else {
-                LOG.trace("Car is not available");
-                req.getSession().setAttribute(Model.MESSAGE, NOT_AVAILABLE);
-                path= Path.ORDER_PAGE;
-                req.getSession().setAttribute(Path.CURRENT_PATH, path);
-                return path;
-            }
+
 
         } catch (NotAdultException | IncorrectDataException e) {
             LOG.trace("Error in executing command");
             req.getSession().setAttribute(Model.MESSAGE, e.getMessage());
-            path= Path.ORDER_PAGE;
+            return Path.ORDER_PAGE;
         }
         req.getSession().setAttribute(Path.CURRENT_PATH, path);
         return CommandUtil.redirectCommand(Commands.SHOW_MY_ORDERS);

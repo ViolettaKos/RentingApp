@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,26 +37,6 @@ public class OrderDAOImpl implements OrderDAO {
             throw new DAOException(e);
         }
     }
-
-//    @Override
-//    public void insertOrder(Order order) throws DAOException {
-//        try (Connection connection = dataSource.getConnection()) {
-//            connection.setAutoCommit(false);
-//            try {
-//                PreparedStatement ps = connection.prepareStatement(INSERT_ORDER);
-//                prepareStForInsert(order, ps);
-//                ps.execute();
-//                connection.commit();
-//            } catch (SQLException e) {
-//                connection.rollback();
-//                throw new DAOException(e);
-//            } finally {
-//                connection.setAutoCommit(true);
-//            }
-//        } catch (SQLException e) {
-//            throw new DAOException(e);
-//        }
-//    }
 
     @Override
     public List<OrderInfo> getInfoOrderByLogin(String username) throws DAOException {
@@ -151,6 +132,34 @@ public class OrderDAOImpl implements OrderDAO {
         }
     }
 
+    @Override
+    public List<LocalDate> getDatesByCar(int car_id) throws DAOException {
+        List<LocalDate> totalDates = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(ALL_DATES)) {
+            ps.setInt(1, car_id);
+            ResultSet rs = ps.executeQuery();
+            LOG.trace("Executing query");
+            String s, e;
+
+            while (rs.next()) {
+                if (!rs.getBoolean(IS_REJECTED) && !rs.getBoolean(IS_RETURNED)) {
+                    s = rs.getString(FROM);
+                    e = rs.getString(TO);
+                    LocalDate start = LocalDate.parse(s);
+                    LocalDate end = LocalDate.parse(e);
+                    while (!start.isAfter(end)) {
+                        totalDates.add(start);
+                        start = start.plusDays(1);
+                    }
+                }
+            }
+        }catch (SQLException e) {
+            throw new DAOException(e);
+        }
+        return totalDates;
+    }
+
     private Order newOrder(ResultSet rs) throws SQLException {
         Order order = new Order();
         order.setId(rs.getInt(ORDER_ID));
@@ -164,6 +173,7 @@ public class OrderDAOImpl implements OrderDAO {
         order.setCar_id(rs.getInt(CAR_ID));
         order.setTotal_days(rs.getInt(TOTAL_DAYS));
         order.setTotal_price(rs.getInt(TOTAL_PRICE));
+        order.setReturned(rs.getBoolean(IS_RETURNED));
         return order;
     }
 
@@ -188,7 +198,7 @@ public class OrderDAOImpl implements OrderDAO {
     private OrderInfo newOrderInfo(ResultSet rs) throws SQLException {
         return new OrderInfo(rs.getInt(ORDER_ID), rs.getInt(CAR_ID), rs.getString(LOGIN), rs.getString(FROM),
                 rs.getString(TO), rs.getInt(TOTAL_DAYS), rs.getBoolean(OPTION), rs.getBoolean(IS_PAYED),
-                rs.getBoolean(IS_REJECTED), rs.getBoolean(AVAILABLE), rs.getString(BRAND), rs.getString(NAME),
-                rs.getString(QUALITY), rs.getInt(PRICE), rs.getInt(TOTAL_PRICE), rs.getString(REASON_REJECT));
+                rs.getBoolean(IS_REJECTED), rs.getString(BRAND), rs.getString(NAME),
+                rs.getString(QUALITY), rs.getInt(PRICE), rs.getInt(TOTAL_PRICE), rs.getString(REASON_REJECT), rs.getBoolean(IS_RETURNED));
     }
 }

@@ -41,7 +41,6 @@ public class EditCarCommand implements Command {
             car.setPrice(price);
             car.setBrand(brand);
             car.setQuality_class(quality);
-            car.setAvailable(car.isAvailable());
 
             carsService.updateCar(car);
         } catch (ServiceException e) {

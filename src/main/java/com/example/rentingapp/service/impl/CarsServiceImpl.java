@@ -59,17 +59,6 @@ public class CarsServiceImpl implements CarsService {
     }
 
     @Override
-    public void updateAvailability(int car_id, boolean isAvailable) throws ServiceException {
-        LOG.trace("updateAvailability method");
-        try {
-            carDAO.updateAvailability(car_id, isAvailable);
-        } catch (DAOException e) {
-            LOG.trace("Error in updating car");
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
     public Set<String> getBrands() throws ServiceException {
         try {
             return carDAO.getBrands();

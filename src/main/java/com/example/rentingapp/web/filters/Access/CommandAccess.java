@@ -33,6 +33,7 @@ public final class CommandAccess {
         userCommands.add(SHOW_MY_ORDERS);
         userCommands.add(MAKE_ORDER);
         userCommands.add(PAY_ORDER);
+        userCommands.add(SET_DATES);
     }
 
     static {

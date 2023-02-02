@@ -57,7 +57,7 @@
         <div class="form-group">
           <label><fmt:message key="name"/> *</label>
           <input type="text" class="form-control" required name="name"
-                 pattern="^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){0,18}[a-zA-Z0-9]$"
+                 pattern="^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$"
                  title="<fmt:message key="warn.Latin"/>">
         </div>
         <div class="form-group">

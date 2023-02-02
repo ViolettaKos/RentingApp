@@ -36,9 +36,7 @@
         value="${order_db.car_id}"/></h4>
 <c:choose>
     <c:when test="${order_db.rejected}">
-        <h4 style="margin-left: 100px;color: black; padding-bottom: 20px;"><fmt:message key="status"/>: <a href="#"
-                                                                                                           onclick="openForm()"
-                                                                                                           style="color: red"><fmt:message
+        <h4 style="margin-left: 100px;color: black; padding-bottom: 20px;"><fmt:message key="status"/>: <a href="#" onclick="openForm()" style="color: red"><fmt:message
                 key="rejected"/></a></h4>
     </c:when>
     <c:when test="${order_db.returned}">
@@ -94,7 +92,7 @@
 
     <c:choose>
     <c:when test="${order_db.rejected || order_db.returned}">
-    <div>
+        <div>
         <div style="float: left; padding: 20px; margin-left: 370px">
             <button class="card-car-button" type="submit" style=" background-color:#FFCCCB; width: 270px" disabled>
                 <fmt:message key="reject"/></button>
@@ -103,9 +101,10 @@
             <button class="card-car-button" type="submit" disabled><fmt:message
                     key="register.return"/></button>
         </div>
+        </div>
         </c:when>
         <c:otherwise>
-            <div>
+        <div>
                 <div style="float: left; padding: 20px; margin-left: 370px">
                     <form action="rejectOrder.jsp">
                         <input type="hidden" name="order_id" value="${order_db.order_id}">
@@ -115,6 +114,7 @@
                                     key="reject"/></button>
                     </form>
                 </div>
+                <c:if test="${order_db.payed}">
                 <div style="float: left; padding: 20px;">
                     <form action="registerReturn.jsp">
                         <input type="hidden" name="order_id" value="${order_db.order_id}">
@@ -123,10 +123,16 @@
                                 key="register.return"/></button>
                     </form>
                 </div>
-            </div>
+                        </c:if>
+                        <c:if test="${!order_db.payed}">
+    <div style="float: left; padding: 10px;">
+                            <button class="card-car-button" style="" type="submit" disabled><fmt:message
+                                    key="register.return"/></button>
+    </div>
+                        </c:if>
+        </div>
         </c:otherwise>
         </c:choose>
-    </div>
 
 
     <div class="form-popup" id="myForm" style="left: 50%; right: 0px; top: 50%; border: none;">

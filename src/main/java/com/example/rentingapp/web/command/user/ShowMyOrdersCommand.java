@@ -11,8 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
-import static com.example.rentingapp.web.command.constants.Model.LOGGED;
-import static com.example.rentingapp.web.command.constants.Model.ORDERS;
+import static com.example.rentingapp.web.command.constants.Model.*;
 
 public class ShowMyOrdersCommand implements Command {
     private static final Logger LOG = Logger.getLogger(ShowMyOrdersCommand.class);
@@ -23,6 +22,9 @@ public class ShowMyOrdersCommand implements Command {
         OrderService orderService= ServiceFactory.getOrderService();
         User user= (User) req.getSession().getAttribute(LOGGED);
         req.setAttribute(ORDERS, orderService.getOrdersByLogin(user.getUsername()));
+        if (req.getSession().getAttribute(COMMENT)!=null)
+            req.setAttribute(COMMENT, req.getSession().getAttribute(COMMENT));
+        req.getSession().removeAttribute(COMMENT);
         return Path.MY_ORDERS;
     }
 

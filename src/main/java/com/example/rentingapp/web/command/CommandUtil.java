@@ -57,6 +57,7 @@ public class CommandUtil {
                 command=ORDER_BY+req.getParameter(SORT)+ASC;
         } else
             command="";
+        LOG.trace("Final command: "+command);
         return command;
 
     }
@@ -82,6 +83,7 @@ public class CommandUtil {
             }
             case MANAGER: {
                 rows=getRowsManagers(req, command, currentPage, recordsPerPage);
+                break;
             }
             case ORDERS: {
                 rows=getRowsOrder(req, command, currentPage, recordsPerPage);
@@ -108,20 +110,28 @@ public class CommandUtil {
     }
 
     private static int getRowsUsers(HttpServletRequest req, String command, int currentPage, int recordsPerPage) throws ServiceException {
+        LOG.trace("Command 1: "+command);
         UserService userService = ServiceFactory.getUserService();
-        command=WHERE_ROLE+USER_DB;
+        String where=WHERE_ROLE+USER_DB;
+        LOG.trace("String where: "+where);
+        String filter = null;
         if(req.getParameter(BUTTON)!=null) {
             switch (req.getParameter(BUTTON)){
                 case TRUE: {
-                    command=command+AND+BLOCKED+EQ+true;
+                    filter=where+AND+BLOCKED+EQ+true;
+                    LOG.trace("String filter: "+filter);
                     break;
                 }
                 case FALSE: {
-                    command=command+AND+BLOCKED+EQ+false;
-                    break;
+                    filter=where+AND+BLOCKED+EQ+false;
+                    LOG.trace("String filter: "+filter);
                 }
             }
-        }
+            command=filter+" "+command;
+            LOG.trace("Command to execute: "+command);
+        } else
+            command=where+command;
+        LOG.trace("Command to execute: "+command);
         req.setAttribute(USER, userService.sortUsers(command, currentPage, recordsPerPage));
         return userService.getNumberOfRows(command);
     }

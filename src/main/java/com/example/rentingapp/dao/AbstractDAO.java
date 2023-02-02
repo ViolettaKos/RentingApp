@@ -11,14 +11,8 @@ import javax.sql.DataSource;
 public abstract class AbstractDAO {
 
     private static AbstractDAO instance;
-    //private static DataSource dataSource;
 
     private static final Logger LOG = Logger.getLogger(AbstractDAO.class);
-
-//    protected AbstractDAO() {
-//        dataSource=ConnectionPool.getDataSource();
-//        LOG.trace("Datasource in constructor: "+dataSource.toString());
-//    }
 
     public abstract UserDAO getUserDAO();
 

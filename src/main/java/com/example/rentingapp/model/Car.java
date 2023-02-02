@@ -13,27 +13,14 @@ public class Car extends Entity {
 
     private String name;
 
-    private boolean isAvailable;
-
-
-    public Car(String brand, String quality_class, String name, int price,
-               boolean isAvailable) {
+    public Car(String brand, String quality_class, String name, int price) {
         this.brand = brand;
         this.quality_class = quality_class;
         this.price = price;
         this.name = name;
-        this.isAvailable=isAvailable;
     }
 
     public Car() {
-    }
-
-    public boolean isAvailable() {
-        return isAvailable;
-    }
-
-    public void setAvailable(boolean available) {
-        isAvailable = available;
     }
 
     public String getBrand() {
@@ -75,9 +62,7 @@ public class Car extends Entity {
                 "brand='" + brand + '\'' +
                 ", quality_class='" + quality_class + '\'' +
                 ", price=" + price +
-                ", name='" + name + '\'' +
-                ", isAvailable=" + isAvailable +
-                '}';
+                ", name='" + name;
     }
 
     @Override
@@ -85,11 +70,11 @@ public class Car extends Entity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Car car = (Car) o;
-        return price == car.price && isAvailable == car.isAvailable && brand.equals(car.brand) && quality_class.equals(car.quality_class) && name.equals(car.name);
+        return price == car.price && brand.equals(car.brand) && quality_class.equals(car.quality_class) && name.equals(car.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(brand, quality_class, price, name, isAvailable);
+        return Objects.hash(brand, quality_class, price, name);
     }
 }

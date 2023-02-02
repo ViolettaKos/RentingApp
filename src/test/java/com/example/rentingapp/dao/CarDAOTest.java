@@ -88,22 +88,9 @@ public class CarDAOTest {
         }
     }
 
-    @Test
-    void updateAvailability() throws SQLException {
-        try (PreparedStatement ps = prepareStatements(dataSource)) {
-            when(ps.executeUpdate()).thenReturn(1);
-            prepareResults(rs);
-            assertDoesNotThrow(() -> carDAO.updateAvailability(CAR_ID_VAL, true));
-        }
-    }
 
-    @Test
-    void updateAvailabilityEXC() throws SQLException {
-        try (PreparedStatement ps = prepareStatements(dataSource)) {
-            when(ps.execute()).thenThrow(new SQLException());
-            assertThrows(DAOException.class, () -> carDAO.updateAvailability(CAR_ID_VAL, true));
-        }
-    }
+
+
 
     @Test
     void getBrandsTest() throws SQLException, DAOException {
@@ -169,7 +156,6 @@ public class CarDAOTest {
         car.setName(NAME_VAL);
         car.setPrice(PRICE_VAL);
         car.setId(CAR_ID_VAL);
-        car.setAvailable(true);
         car.setQuality_class(QUALITY_VAL);
         return car;
     }
@@ -181,7 +167,6 @@ public class CarDAOTest {
         when(rs.getString(NAME)).thenReturn(NAME_VAL);
         when(rs.getInt(CAR_ID)).thenReturn(CAR_ID_VAL);
         when(rs.getInt(PRICE)).thenReturn(PRICE_VAL);
-        when(rs.getBoolean(AVAILABLE)).thenReturn(true);
     }
 
     private Statement prepareSt(DataSource dataSource) throws SQLException {

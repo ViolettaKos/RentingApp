@@ -16,7 +16,11 @@ public class DisplayOrderCommand implements Command {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse response, CommandType commandType) throws ServiceException {
         OrderService orderService= ServiceFactory.getOrderService();
-        req.setAttribute(ORDER_INFO, orderService.getOrderInfo(Integer.parseInt(req.getParameter(ID))));
+        if(req.getParameter(ID)!=null)
+            req.setAttribute(ORDER_INFO, orderService.getOrderInfo(Integer.parseInt(req.getParameter(ID))));
+        else
+            req.setAttribute(ORDER_INFO, orderService.getOrderInfo((Integer) req.getSession().getAttribute(ID)));
+        req.getSession().removeAttribute(ID);
         return Path.ORDER_INFO_PAGE;
     }
 }

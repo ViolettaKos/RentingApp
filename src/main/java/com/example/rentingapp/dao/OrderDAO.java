@@ -4,6 +4,7 @@ import com.example.rentingapp.exception.DAOException;
 import com.example.rentingapp.model.Order;
 import com.example.rentingapp.model.OrderInfo;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface OrderDAO {
@@ -20,4 +21,7 @@ public interface OrderDAO {
     OrderInfo getOrderInfo(int order_id) throws DAOException;
 
     void rejectOrder(int order_id, String comment) throws DAOException;
+
+    List<LocalDate> getDatesByCar(int car_id) throws DAOException;
+
 }

@@ -13,4 +13,5 @@ public interface OrderStatements {
             "SELECT * FROM `order` INNER JOIN car on `order`.car_id = car.car_id WHERE order_id=?";
 
     String REJECT_AND_COMMENT="UPDATE `order` SET isRejected=true, reason_for_reject=? WHERE order_id=?";
+    String ALL_DATES="SELECT `from`, `to`, isRejected, isReturned FROM `order` WHERE car_id=?";
 }

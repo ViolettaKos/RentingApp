@@ -5,19 +5,14 @@ import java.util.Objects;
 
 public class OrderInfo {
 
-    private int order_id;
-
-    private int car_id;
+    private int order_id;private int car_id;
     private String login;
     private String from, to;
     private int total_days;
     private boolean option, isPayed, isRejected, isReturned;
     private String brand, name, quality_class;
-
     private int car_price;
-
     private int total_price;
-
     private String comment;
 
     public OrderInfo() {
@@ -33,8 +28,8 @@ public class OrderInfo {
     }
 
     public OrderInfo(int order_id, int car_id, String login,String from, String to, int total_days, boolean option,
-                     boolean isPayed, boolean isRejected, boolean isReturned, String brand, String name, String quality_class, int car_price,
-                     int total_price, String comment) {
+                     boolean isPayed, boolean isRejected, String brand, String name, String quality_class, int car_price,
+                     int total_price, String comment, boolean isReturned) {
         this.order_id = order_id;
         this.car_id = car_id;
         this.login = login;
@@ -43,7 +38,6 @@ public class OrderInfo {
         this.total_days = total_days;
         this.option = option;
         this.isPayed = isPayed;
-        this.isReturned = isReturned;
         this.brand = brand;
         this.name = name;
         this.quality_class = quality_class;
@@ -51,14 +45,7 @@ public class OrderInfo {
         this.total_price=total_price;
         this.isRejected=isRejected;
         this.comment=comment;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
+        this.isReturned=isReturned;
     }
 
     public boolean isReturned() {
@@ -67,6 +54,14 @@ public class OrderInfo {
 
     public void setReturned(boolean returned) {
         isReturned = returned;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public int getOrder_id() {
@@ -180,13 +175,13 @@ public class OrderInfo {
         OrderInfo orderInfo = (OrderInfo) o;
         return order_id == orderInfo.order_id && car_id == orderInfo.car_id && total_days == orderInfo.total_days
                 && option == orderInfo.option && isPayed == orderInfo.isPayed && isRejected == orderInfo.isRejected
-                && isReturned == orderInfo.isReturned && car_price == orderInfo.car_price && total_price == orderInfo.total_price
+                && car_price == orderInfo.car_price && total_price == orderInfo.total_price && isReturned == orderInfo.isReturned
                 && login.equals(orderInfo.login) && from.equals(orderInfo.from) && to.equals(orderInfo.to) && brand.equals(orderInfo.brand)
                 && name.equals(orderInfo.name) && quality_class.equals(orderInfo.quality_class) && comment.equals(orderInfo.comment);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(order_id, car_id, login, from, to, total_days, option, isPayed, isRejected, isReturned, brand, name, quality_class, car_price, total_price, comment);
+        return Objects.hash(order_id, isReturned, car_id, login, from, to, total_days, option, isPayed, isRejected,brand, name, quality_class, car_price, total_price, comment);
     }
 }

@@ -33,17 +33,19 @@ public class RejectOrderCommand implements Command {
         LOG.trace("Reason for rejection: "+req.getParameter(COMMENT));
         String comment=req.getParameter(COMMENT);
         int order_id= Integer.parseInt(req.getParameter(ID));
-        int car_id= Integer.parseInt(req.getParameter(CAR_ID));
         OrderService orderService= ServiceFactory.getOrderService();
-        CarsService carsService=ServiceFactory.getCarsService();
+
         orderService.rejectOrder(order_id, comment);
+
         OrderInfo orderInfo=orderService.getOrderInfo(order_id);
         UserService userService=ServiceFactory.getUserService();
         User user=userService.getByLogin(orderInfo.getLogin());
-        carsService.updateAvailability(car_id, true);
+        orderInfo.setComment(comment);
+
         req.setAttribute(ORDER_INFO, orderService.getOrderInfo(order_id));
+        req.getSession().setAttribute(ID, order_id);
         sendReject(user, comment);
-        return Path.ORDER_INFO_PAGE;
+        return CommandUtil.redirectCommand(DISPLAY_ORDER);
     }
     private void sendReject(User user, String reason) {
         String body = String.format(MESSAGE_REJECTED, user.getFirstName(), reason);

@@ -43,7 +43,7 @@ public class AddCarCommand implements Command {
         String quality = req.getParameter(QUALITY);
         int price = Integer.parseInt(req.getParameter(PRICE));
         String path = ADMIN_CARS_PAGE;
-        Car car=new Car(brand, quality, name, price, true);
+        Car car=new Car(brand, quality, name, price);
         CarsService carsService=ServiceFactory.getCarsService();
         carsService.addCar(car);
         String fileName= carsService.getLastId();

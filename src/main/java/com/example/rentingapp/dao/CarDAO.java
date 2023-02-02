@@ -14,8 +14,6 @@ public interface CarDAO {
 
     Car getById(int id) throws DAOException;
 
-    void updateAvailability(int car_id, boolean isAvailable) throws DAOException;
-
     Set<String> getBrands() throws DAOException;
 
     void insertCar(Car car) throws DAOException;

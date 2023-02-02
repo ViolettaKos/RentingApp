@@ -53,7 +53,6 @@ public class CarDAOImpl implements CarDAO {
         int records = 0;
         LOG.trace("Filter: " + filter);
         String command = String.format(GET_NUMBER_OF_RECORDS_CAR, filter);
-        LOG.trace("Command: " + command);
         try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(command)) {
             ResultSet rs = ps.executeQuery();
@@ -82,18 +81,6 @@ public class CarDAOImpl implements CarDAO {
             throw new DAOException(e);
         }
         return car;
-    }
-
-    @Override
-    public void updateAvailability(int car_id, boolean isAvailable) throws DAOException {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement ps = connection.prepareStatement(UPDATE_AVAILABILITY_BY_ID)) {
-            ps.setBoolean(1, isAvailable);
-            ps.setInt(2, car_id);
-            ps.execute();
-        } catch (SQLException e) {
-            throw new DAOException(e);
-        }
     }
 
     @Override
@@ -182,7 +169,6 @@ public class CarDAOImpl implements CarDAO {
         car.setQuality_class(rs.getString(QUALITY));
         car.setName(rs.getString(NAME));
         car.setPrice(rs.getInt(PRICE));
-        car.setAvailable(rs.getBoolean(AVAILABLE));
         return car;
     }
 }

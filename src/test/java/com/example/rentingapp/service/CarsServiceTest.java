@@ -69,18 +69,6 @@ public class CarsServiceTest {
     }
 
     @Test
-    void updateAvailabilityTest() throws DAOException {
-        doNothing().when(carDAO).updateAvailability(isA(Integer.class), isA(Boolean.class));
-        assertDoesNotThrow(() -> carsService.updateAvailability(CAR_ID_VAL, true));
-    }
-
-    @Test
-    void updateAvailabilityExcTest() throws DAOException {
-        Exception exc = new DAOException(new SQLException());
-        doThrow(exc).when(carDAO).updateAvailability(isA(Integer.class), isA(Boolean.class));
-        assertThrows(ServiceException.class, () -> carsService.updateAvailability(CAR_ID_VAL, true));
-    }
-    @Test
     void getBrandsTest() throws DAOException {
         Set<String> brands=new HashSet<>();
         brands.add(createCar().getBrand());
@@ -150,7 +138,6 @@ public class CarsServiceTest {
         car.setName(NAME_VAL);
         car.setPrice(PRICE_VAL);
         car.setId(CAR_ID_VAL);
-        car.setAvailable(true);
         car.setQuality_class(QUALITY_VAL);
         return car;
     }

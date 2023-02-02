@@ -7,8 +7,6 @@ public interface CarStatements {
             "SELECT COUNT(car_id) AS numberOfRecords FROM CAR %s";
     String SELECT_BY_ID_CAR=
             "SELECT * FROM car WHERE car_id=?";
-    String UPDATE_AVAILABILITY_BY_ID =
-            "UPDATE car SET isAvailable = ? WHERE car_id=?";
     String SELECT_BRANDS =
             "SELECT brand FROM car";
     String INSERT_CAR =

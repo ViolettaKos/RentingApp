@@ -7,6 +7,7 @@ public class Order extends Entity {
     private String login;
     private boolean isPayed;
     private boolean isRejected;
+    private boolean isReturned;
     private int total_price;
     private int car_id;
     private String from;
@@ -16,7 +17,7 @@ public class Order extends Entity {
     private String comment;
 
     public Order(String login, boolean isPayed, boolean isRejected, int total_price, int car_id,
-                 String from, String to, long total_days, boolean option, String comment) {
+                 String from, String to, long total_days, boolean option, String comment, boolean isReturned) {
         this.login = login;
         this.isPayed = isPayed;
         this.total_price = total_price;
@@ -27,9 +28,18 @@ public class Order extends Entity {
         this.option = option;
         this.isRejected=isRejected;
         this.comment=comment;
+        this.isReturned=isReturned;
     }
 
     public Order() {
+    }
+
+    public boolean isReturned() {
+        return isReturned;
+    }
+
+    public void setReturned(boolean returned) {
+        isReturned = returned;
     }
 
     public String getComment() {
@@ -134,11 +144,11 @@ public class Order extends Entity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return isPayed == order.isPayed && isRejected == order.isRejected && total_price == order.total_price && car_id == order.car_id && total_days == order.total_days && option == order.option && login.equals(order.login) && from.equals(order.from) && to.equals(order.to) && comment.equals(order.comment);
+        return isReturned == order.isReturned && isPayed == order.isPayed && isRejected == order.isRejected && total_price == order.total_price && car_id == order.car_id && total_days == order.total_days && option == order.option && login.equals(order.login) && from.equals(order.from) && to.equals(order.to) && comment.equals(order.comment);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(login, isPayed, isRejected, total_price, car_id, from, to, total_days, option, comment);
+        return Objects.hash(login, isPayed, isRejected, isReturned, total_price, car_id, from, to, total_days, option, comment);
     }
 }

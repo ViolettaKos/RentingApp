@@ -37,7 +37,6 @@ public interface Fields {
     String QUALITY="quality_class";
     String PRICE="price";
     String CAR_ID="car_id";
-    String AVAILABLE="isAvailable";
 
     //////////////       ORDER       ///////////////
     String AGE="age";
@@ -51,7 +50,7 @@ public interface Fields {
     String TOTAL_DAYS="total_days";
     String IS_PAYED="isPayed";
     String IS_REJECTED="isRejected";
-    String IS_AVAILABLE="isAvailable";
+    String IS_RETURNED="isReturned";
     String TOTAL_PRICE="total_price";
     String REASON_REJECT="reason_for_reject";
 

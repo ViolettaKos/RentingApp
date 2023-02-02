@@ -37,6 +37,7 @@ public class CommandManager {
         commands.put(EDIT, new EditCommand());
         commands.put(TOP_UP, new TopUpCommand());
         commands.put(SHOW_MY_ORDERS, new ShowMyOrdersCommand());
+        commands.put(GET_REASON, new GetReasonCommand());
 
         //////////////      CAR ACTIONS       ///////////////
         commands.put(SHOW_CARS, new ShowCarsCommand());
@@ -45,6 +46,7 @@ public class CommandManager {
         //////////////      ORDER ACTIONS       ///////////////
         commands.put(MAKE_ORDER, new MakeOrderCommand(EMAIL_CONTEXT));
         commands.put(PAY_ORDER, new PayOrderCommand(EMAIL_CONTEXT));
+        commands.put(SET_DATES, new SetDatesCommand());
 
         //////////////      ADMIN ACTIONS       ///////////////
         commands.put(SHOW_ADMIN_CARS, new ShowAdminCarsCommand());

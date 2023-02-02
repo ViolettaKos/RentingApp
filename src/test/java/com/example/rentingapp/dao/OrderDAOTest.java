@@ -181,7 +181,6 @@ public class OrderDAOTest {
         when(rs.getString(NAME)).thenReturn(NAME_VAL);
         when(rs.getInt(PRICE)).thenReturn(PRICE_VAL);
         when(rs.getString(LOGIN)).thenReturn(LOGIN_VAL);
-        when(rs.getBoolean(IS_AVAILABLE)).thenReturn(true);
     }
 
     private Order createOrder() {
@@ -213,7 +212,6 @@ public class OrderDAOTest {
         orderInfo.setComment(REASON_VAL);
         orderInfo.setOrder_id(ORDER_ID_VAL);
         orderInfo.setLogin(LOGIN_VAL);
-        orderInfo.setReturned(true);
         orderInfo.setBrand(BRAND_VAL);
         orderInfo.setName(NAME_VAL);
         orderInfo.setQuality_class(QUALITY_VAL);

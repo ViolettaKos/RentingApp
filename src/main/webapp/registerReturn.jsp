@@ -57,7 +57,6 @@
     <input type="number" id="money" name="money" min="10" max="50 000 000" required><br><br>
     </div>
     <input type="hidden" name="order_id" value="${param.order_id}">
-    <input type="hidden" name="car_id" value="${param.car_id}">
   <button type="submit" class="load-more"><fmt:message key="register.return"/></button>
   </form>
 </fieldset>
@@ -65,9 +64,9 @@
 
 <script>
   function myFunction1() {
-    if(document.getElementById('true').checked) {
+    if(document.getElementById('yes').checked) {
       document.getElementById("amount").style.display="block";
-    }else if(document.getElementById('false').checked) {
+    }else if(document.getElementById('no').checked) {
       document.getElementById("amount").style.display="none";
     }
   }

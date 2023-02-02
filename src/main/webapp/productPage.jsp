@@ -44,32 +44,20 @@
         <p class="h5 m-0">${car.quality_class}<span class="ps-1"> <fmt:message key="class"/></span></p>
     </div>
     <div class="col-md-4 col-6 ps-30 my-4">
-        <p class="text-muted"><fmt:message key="availability"/></p>
-<c:choose>
-        <c:when test="${car.available eq true}">
-            <p class="h5 m-0" style="color: green"><fmt:message key="available"/></p>
-        </c:when>
-        <c:otherwise>
-            <p class="h5 m-0" style="color: red"><fmt:message key="no.available"/></p>
-        </c:otherwise>
-</c:choose>
-    </div>
-    <div class="col-md-4 col-6 ps-30 my-4">
         <p class="text-muted"><fmt:message key="car.id"/></p>
         <p class="h5 m-0">${car.id}
         </p>
     </div>
     <div class="col-md-4 col-6 ps-30 my-4">
         <p class="text-muted"><fmt:message key="price"/></p>
-        <p class="h5 m-0"><fmt:formatNumber value="${car.price}"
-                                            type="currency"/></p>
+        <p class="h5 m-0"><fmt:formatNumber value="${car.price}" type="currency"/></p>
     </div>
 </div>
 <c:choose>
-    <c:when test="${sessionScope.role eq 'user' && sessionScope.logged.blocked eq false && car.available eq true}">
-        <form action="orderPage.jsp" method="get" style="margin-top: 50px">
+    <c:when test="${sessionScope.role eq 'user' && sessionScope.logged.blocked eq false}">
+        <form action="controller" method="get" style="margin-top: 50px">
+            <input type="hidden" name="command" value="set_dates_for_order">
             <input type="hidden" name="car_id" value="${car.id}">
-            <input type="hidden" name="price" value="${car.price}">
             <button class="card-car-button" type="submit" style="margin-left: 240px"><fmt:message key="book"/></button>
         </form>
     </c:when>
@@ -87,21 +75,6 @@
     padding: 10px 80px;
     cursor: pointer;"><fmt:message key="book"/></button>
         <p style="text-align: center; margin-top: 10px; color: darkred; font-style: italic"><fmt:message key="warn.block"/></p>
-    </c:when>
-    <c:when test="${car.available eq false}">
-        <button type="button" disabled="disabled" style="margin-left: 240px; margin-top: 20px;
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    right: 50%;
-    background-color: #D1E2C4;
-    border-radius: 30px;
-    border: none;
-    text-align: center;
-    text-decoration: none;
-    padding: 10px 80px;
-    cursor: pointer;"><fmt:message key="book"/></button>
-        <p style="text-align: center; margin-top: 10px; color: darkred; font-style: italic"><fmt:message key="warn.availability"/></p>
     </c:when>
     <c:otherwise>
         <button type="button" disabled="disabled" style="margin-left: 240px; margin-top: 20px;
