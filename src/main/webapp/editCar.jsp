@@ -57,7 +57,7 @@
         </div>
         <div class="form-group">
           <label><fmt:message key="qualityC"/> *</label>
-          <input type="text" class="form-control" required name="quality"
+          <input type="text" class="form-control" required name="quality_class"
                  pattern="^[A-E]"
                  title="<fmt:message key="warn.class"/>"
                  value="${car.quality_class}">

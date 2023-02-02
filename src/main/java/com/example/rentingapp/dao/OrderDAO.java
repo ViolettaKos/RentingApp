@@ -24,4 +24,7 @@ public interface OrderDAO {
 
     List<LocalDate> getDatesByCar(int car_id) throws DAOException;
 
+    Order getOrderById(int order_id) throws DAOException;
+
+    void updateReturn(int order_id) throws DAOException;
 }

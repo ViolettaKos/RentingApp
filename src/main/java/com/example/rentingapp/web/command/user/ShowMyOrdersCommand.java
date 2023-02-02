@@ -22,9 +22,6 @@ public class ShowMyOrdersCommand implements Command {
         OrderService orderService= ServiceFactory.getOrderService();
         User user= (User) req.getSession().getAttribute(LOGGED);
         req.setAttribute(ORDERS, orderService.getOrdersByLogin(user.getUsername()));
-        if (req.getSession().getAttribute(COMMENT)!=null)
-            req.setAttribute(COMMENT, req.getSession().getAttribute(COMMENT));
-        req.getSession().removeAttribute(COMMENT);
         return Path.MY_ORDERS;
     }
 

@@ -46,8 +46,8 @@
             </c:otherwise>
         </c:choose>
         <c:if test="${order.rejected}">
-<%--            <h4 style="color: black; padding-bottom: 20px;"><fmt:message key="status"/>: <a href="#" onclick="openForm()" style="color: red"><fmt:message key="rejected"/></a></h4>--%>
-            <h4 style="color: black; padding-bottom: 20px;"><fmt:message key="status"/>: <a href="controller?command=get_reason&id=${order.order_id}" onclick="openForm()" onblur="openForm()" style="color: red"><fmt:message key="rejected"/></a></h4>
+            <h4 style="color: black;"><fmt:message key="status"/>: <a style="color: red"><fmt:message key="rejected"/></a></h4>
+            <h5 style="padding-bottom: 20px; font-style: italic; color: red; text-decoration: underline">${order.comment} </h5>
         </c:if>
         <div class="col-md-4 col-6 ps-30 pe-0 my-4">
             <p class="text-muted"><fmt:message key="car"/></p>
@@ -106,23 +106,6 @@
         </form>
     </div>
 </c:forEach>
-<div class="form-popup" id="myForm" style="left: 50%; right: 0px; top: 50%; border: none;">
-    <div class="form-container" style="margin-left: -150px; background-color: green ">
-        <h3 style="text-align: center; color: white"><fmt:message key="reason"/></h3>
-        <p style="text-align: center; color: white"><c:out value="${requestScope.comment}"/></p>
-        <button type="button" class="btn cancel" onclick="closeForm()"><fmt:message key="close"/></button>
-    </div>
-</div>
-
-<script>
-    function openForm() {
-        document.getElementById("myForm").style.display = "block";
-    }
-
-    function closeForm() {
-        document.getElementById("myForm").style.display = "none";
-    }
-</script>
 
 </body>
 </html>

@@ -1,5 +1,6 @@
 package com.example.rentingapp.web.command.base;
 
+import com.example.rentingapp.dao.DAOImpl.constants.Fields;
 import com.example.rentingapp.exception.*;
 import com.example.rentingapp.model.User;
 import com.example.rentingapp.service.ServiceFactory;
@@ -44,6 +45,7 @@ public class EditCommand implements Command {
             if (!username.equals(user.getUsername())) {
                 userService.checkIfExists(username);
             }
+            user.setId(user.getId());
             user.setFirstName(firstname);
             user.setLastName(lastname);
             user.setPassword(pass);
@@ -52,6 +54,9 @@ public class EditCommand implements Command {
             user.setTelephone(telephone);
 
             userService.update(user);
+
+            req.getSession().setAttribute(Model.LOGGED, user);
+            req.getSession().setAttribute(Fields.ROLE, user.getRole());
 
         } catch (IncorrectDataException | IncorrectEmailException | DuplicatedLoginException e) {
             LOG.trace("Error in executing command");

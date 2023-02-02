@@ -54,7 +54,7 @@
   </div>
     <div id = "amount" style="display:none">
     <label for="money"><fmt:message key="money.repair"/></label>
-    <input type="number" id="money" name="money" min="10" max="50 000 000" required><br><br>
+    <input type="number" id="money" name="invoice" min="10" max="50 000 000"><br><br>
     </div>
     <input type="hidden" name="order_id" value="${param.order_id}">
   <button type="submit" class="load-more"><fmt:message key="register.return"/></button>
@@ -66,8 +66,10 @@
   function myFunction1() {
     if(document.getElementById('yes').checked) {
       document.getElementById("amount").style.display="block";
+      $('#money').attr('required', '');
     }else if(document.getElementById('no').checked) {
       document.getElementById("amount").style.display="none";
+      $('#money').removeAttr('required', '');
     }
   }
 </script>

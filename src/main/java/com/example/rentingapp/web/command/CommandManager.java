@@ -37,7 +37,6 @@ public class CommandManager {
         commands.put(EDIT, new EditCommand());
         commands.put(TOP_UP, new TopUpCommand());
         commands.put(SHOW_MY_ORDERS, new ShowMyOrdersCommand());
-        commands.put(GET_REASON, new GetReasonCommand());
 
         //////////////      CAR ACTIONS       ///////////////
         commands.put(SHOW_CARS, new ShowCarsCommand());

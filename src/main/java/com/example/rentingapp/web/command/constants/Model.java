@@ -17,5 +17,5 @@ public interface Model {
     String USER_DB= "'user'";
     String MANAGER_DB= "'manager'";
     String DAMAGE="damage";
-    String MONEY="money";
+    String INVOICE="invoice";
 }

@@ -160,6 +160,33 @@ public class OrderDAOImpl implements OrderDAO {
         return totalDates;
     }
 
+    @Override
+    public Order getOrderById(int order_id) throws DAOException {
+        Order order = null;
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(SELECT_ORDER)) {
+            ps.setInt(1, order_id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                order = newOrder(rs);
+            }
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+        return order;
+    }
+
+    @Override
+    public void updateReturn(int order_id) throws DAOException {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(UPDATE_RETURN)) {
+            ps.setInt(1, order_id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+    }
+
     private Order newOrder(ResultSet rs) throws SQLException {
         Order order = new Order();
         order.setId(rs.getInt(ORDER_ID));

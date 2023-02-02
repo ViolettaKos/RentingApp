@@ -1,6 +1,8 @@
 package com.example.rentingapp.web.command.manager;
 
+import com.example.rentingapp.exception.ExcConstants;
 import com.example.rentingapp.exception.ServiceException;
+import com.example.rentingapp.model.Order;
 import com.example.rentingapp.model.OrderInfo;
 import com.example.rentingapp.model.User;
 import com.example.rentingapp.service.CarsService;
@@ -11,6 +13,7 @@ import com.example.rentingapp.utils.EmailSender;
 import com.example.rentingapp.web.command.Command;
 import com.example.rentingapp.web.command.CommandType;
 import com.example.rentingapp.web.command.CommandUtil;
+import com.example.rentingapp.web.command.constants.Model;
 import com.example.rentingapp.web.command.constants.Path;
 import com.example.rentingapp.web.listeners.EmailContext;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,21 +35,29 @@ public class RegisterReturnCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse response, CommandType commandType) throws ServiceException {
-        LOG.trace("Is damaged? "+req.getParameter(DAMAGE));
+    public String execute(HttpServletRequest req, HttpServletResponse resp, CommandType commandType) throws ServiceException {
         int order_id= Integer.parseInt(req.getParameter(ORDER_ID));
         boolean isDamaged= Boolean.parseBoolean(req.getParameter(DAMAGE));
+        LOG.trace("Is damaged? "+isDamaged);
 
         OrderService orderService=ServiceFactory.getOrderService();
         OrderInfo orderInfo=orderService.getOrderInfo(order_id);
         UserService userService=ServiceFactory.getUserService();
         User user=userService.getByLogin(orderInfo.getLogin());
-        if(isDamaged) {
-            String invoice=req.getParameter(MONEY);
+
+        if(isDamaged && req.getParameter(INVOICE)!=null) {
+            String invoice=req.getParameter(INVOICE);
             sendInvoice(user, invoice);
-        } else {
+        } else if(!isDamaged) {
             sendThanks(user);
         }
+
+        Order order=orderService.getOrderById(order_id);
+
+        orderService.updateReturn(order_id);
+        order.setReturned(true);
+        orderInfo.setReturned(true);
+
         req.setAttribute(ORDER_INFO, orderInfo);
         req.getSession().setAttribute(ID, order_id);
         return CommandUtil.redirectCommand(DISPLAY_ORDER);

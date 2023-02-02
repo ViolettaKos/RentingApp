@@ -99,4 +99,24 @@ public class OrderServiceImpl implements OrderService {
             throw new ServiceException(e);
         }
     }
+
+    @Override
+    public Order getOrderById(int order_id) throws ServiceException {
+        LOG.trace("Entering getOrderById method");
+        try {
+            return orderDAO.getOrderById(order_id);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public void updateReturn(int order_id) throws ServiceException {
+        LOG.trace("Entering updateReturn method");
+        try {
+            orderDAO.updateReturn(order_id);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
 }

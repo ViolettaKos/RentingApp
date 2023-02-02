@@ -23,4 +23,8 @@ public interface OrderService {
     void rejectOrder(int order_id, String comment) throws ServiceException;
 
     List<LocalDate> getDatesByCar(int car_id) throws ServiceException;
+
+    Order getOrderById(int order_id) throws ServiceException;
+
+    void updateReturn(int order_id) throws ServiceException;
 }

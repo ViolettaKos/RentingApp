@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 
 import static com.example.rentingapp.dao.DAOImpl.constants.Fields.*;
 import static com.example.rentingapp.web.command.CommandUtil.redirectCommand;
+import static com.example.rentingapp.web.command.constants.Commands.SHOW_ADMIN_CARS;
 import static com.example.rentingapp.web.command.constants.Model.CAR;
 import static com.example.rentingapp.web.command.constants.Model.ID;
 import static com.example.rentingapp.web.command.constants.Path.*;
@@ -48,7 +49,7 @@ public class EditCarCommand implements Command {
             path = ERROR_PAGE;
         }
         req.getSession().setAttribute(Path.CURRENT_PATH, path);
-        return redirectCommand(ADMIN_CARS_PAGE);
+        return redirectCommand(SHOW_ADMIN_CARS);
     }
 
     private String doGet(HttpServletRequest req) throws ServiceException {

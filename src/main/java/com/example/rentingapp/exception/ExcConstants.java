@@ -8,5 +8,6 @@ public interface ExcConstants {
     String DUPLICATE_LOGIN="warn.duplicated_login";
     String NO_USER="warn.no_user";
     String MIN_AGE="warn.age";
+    String EMPTY_FIELD="warn.empty";
 
 }
