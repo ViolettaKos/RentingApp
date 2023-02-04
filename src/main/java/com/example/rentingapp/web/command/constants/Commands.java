@@ -28,6 +28,7 @@ public interface Commands {
     String REJECT = "reject";
     String REGISTER_RETURN = "register_return";
     String SET_DATES="set_dates_for_order";
+    String RESTORE="restore";
     String ERROR = "error";
 
 }

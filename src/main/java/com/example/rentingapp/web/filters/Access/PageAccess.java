@@ -20,6 +20,7 @@ public final class PageAccess {
         guestPages.add(BOOK_PAGE);
         guestPages.add(PRODUCT_PAGE);
         guestPages.add(CONTACTS_PAGE);
+        guestPages.add(RESTORE_PAGE);
     }
 
     static {

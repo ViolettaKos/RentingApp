@@ -12,6 +12,7 @@ public interface Path {
     String SIGN_UP_PAGE = "signUp.jsp";
     String LOGIN_PAGE = "login.jsp";
     String CONTACTS_PAGE="contactsPage.jsp";
+    String RESTORE_PAGE="restorePass.jsp";
 
     ////////////////////           CARS           ////////////////////
     String BOOK_PAGE="bookPage.jsp";

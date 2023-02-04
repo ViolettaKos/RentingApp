@@ -9,6 +9,7 @@ public interface EmailConstants {
     String TOPIC_BLOCKED="Your account was blocked!";
     String TOPIC_UNBLOCKED="Your account was unblocked!";
     String TOPIC_PAY="Successful payment!";
+    String TOPIC_CHANGE_PASS="Change your password";
 
     String SIGNATURE = "Best regards,<br>Car Rent team";
     String HELLO = "Hello %s,<br>";
@@ -55,4 +56,9 @@ public interface EmailConstants {
     String MESSAGE_PAYMENT = HELLO +
             "Your Car Rent transaction was successful. Thank you!"+
             SPACE+SIGNATURE;
+    String MESSAGE_CONFIRM = HELLO +
+            "We received your request for restoring password. Here is your new password: "+INPUT+SPACE+
+            "You can change it at any time!"+
+            SPACE + SIGNATURE;
+
 }

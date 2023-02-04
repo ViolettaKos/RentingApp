@@ -17,6 +17,7 @@ public final class CommandAccess {
         guestCommands.add(LOGIN);
         guestCommands.add(SHOW_CARS);
         guestCommands.add(SHOW_CAR);
+        guestCommands.add(RESTORE);
         guestCommands.add(ERROR);
     }
 

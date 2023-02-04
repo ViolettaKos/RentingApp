@@ -21,4 +21,6 @@ public interface UserStatements {
             "SELECT COUNT(user_id) AS numberOfRecords FROM USER %s";
     String UPDATE_STATUS =
             "UPDATE user SET blocked=? WHERE login=?";
+    String UPDATE_PASS =
+            "UPDATE user SET password=? WHERE login=?";
 }

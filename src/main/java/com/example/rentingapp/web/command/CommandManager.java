@@ -32,6 +32,7 @@ public class CommandManager {
         commands.put(LOGIN, new LoginCommand());
         commands.put(USER_REG, new UserRegistrCommand(EMAIL_CONTEXT));
         commands.put(LOG_OUT, new LogOutCommand());
+        commands.put(RESTORE, new RestorePassCommand(EMAIL_CONTEXT));
 
         //////////////      PROFILE ACTIONS       ///////////////
         commands.put(EDIT, new EditCommand());

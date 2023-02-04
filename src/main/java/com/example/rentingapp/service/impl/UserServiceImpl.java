@@ -14,13 +14,12 @@ import com.example.rentingapp.utils.Validator;
 import org.apache.log4j.Logger;
 
 import java.util.List;
+import java.util.Random;
 
 public class UserServiceImpl implements UserService {
 
     private static final Logger LOG = Logger.getLogger(UserServiceImpl.class);
-
     private final Validator validator = new Validator();
-//    private final UserDAO userDAO = AbstractDAO.getInstance().getUserDAO();
     private final UserDAO userDAO;
 
     public UserServiceImpl() {
@@ -132,6 +131,24 @@ public class UserServiceImpl implements UserService {
             LOG.trace("Error in updateStatus");
             throw new ServiceException(e);
         }
+    }
+
+    @Override
+    public void changePass(String username, String newPass) throws ServiceException {
+        LOG.trace("changePass method");
+        try {
+            userDAO.updatePass(username, newPass);
+        } catch (DAOException e) {
+            LOG.trace("Error in updateStatus");
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public String getNewPass() {
+        return new Random().ints(10, 33, 122)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
     }
 
     private void validateUser(User user) throws ServiceException {

@@ -24,4 +24,6 @@ public interface UserDAO {
     int getNumberOfRows(String command) throws DAOException;
 
     void updateStatus(String login, boolean action) throws DAOException;
+
+    void updatePass(String username, String newPass) throws DAOException;
 }

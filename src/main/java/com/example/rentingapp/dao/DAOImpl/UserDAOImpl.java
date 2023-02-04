@@ -151,6 +151,18 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
+    @Override
+    public void updatePass(String username, String newPass) throws DAOException {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(UPDATE_PASS)) {
+            ps.setString(1, newPass);
+            ps.setString(2, username);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+    }
+
 
     private void removeMoney(int amount, String login) throws DAOException {
         try (Connection connection = dataSource.getConnection();
