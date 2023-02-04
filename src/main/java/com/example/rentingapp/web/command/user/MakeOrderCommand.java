@@ -49,12 +49,12 @@ public class MakeOrderCommand implements Command {
 
     private String doPost(HttpServletRequest req) throws ServiceException {
         String age=req.getParameter(AGE);
-        String from=req.getParameter(FROM); // 14-02-2023
+        String from=req.getParameter(FROM);
         String to=req.getParameter(TO);
         LOG.trace("From: "+from);
         LOG.trace("To: "+to);
         boolean option= Boolean.parseBoolean(req.getParameter(OPTION));
-        int car_id= Integer.parseInt(req.getParameter(CAR_ID));
+        int car_id=Integer.parseInt(req.getParameter(CAR_ID));
         User user = (User) req.getSession().getAttribute(LOGGED);
         String login=user.getUsername();
 
@@ -72,13 +72,13 @@ public class MakeOrderCommand implements Command {
             orderService.putOrder(order);
             sendConfirmation(user);
 
-
-        } catch (NotAdultException | IncorrectDataException e) {
+        } catch (ServiceException e) {
             LOG.trace("Error in executing command");
             req.getSession().setAttribute(Model.MESSAGE, e.getMessage());
-            return Path.ORDER_PAGE;
+            return CommandUtil.redirectCommand(Commands.SET_DATES, CAR_ID, String.valueOf(car_id));
         }
         req.getSession().setAttribute(Path.CURRENT_PATH, path);
+        req.getSession().removeAttribute(CAR_ID);
         return CommandUtil.redirectCommand(Commands.SHOW_MY_ORDERS);
     }
 

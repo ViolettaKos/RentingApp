@@ -1,7 +1,9 @@
 package com.example.rentingapp.dao.DAOImpl;
 
 import com.example.rentingapp.dao.OrderDAO;
+import com.example.rentingapp.exception.DAODuplicatedDateException;
 import com.example.rentingapp.exception.DAOException;
+import com.example.rentingapp.exception.ExcConstants;
 import com.example.rentingapp.model.Car;
 import com.example.rentingapp.model.Order;
 import com.example.rentingapp.model.OrderInfo;
@@ -27,15 +29,70 @@ public class OrderDAOImpl implements OrderDAO {
         this.dataSource = dataSource;
     }
 
+//    @Override
+//    public void insertOrder(Order order) throws DAOException {
+//        try (Connection connection = dataSource.getConnection();
+//             PreparedStatement ps = connection.prepareStatement(INSERT_ORDER)) {
+//            prepareStForInsert(order, ps);
+//            ps.execute();
+//        } catch (SQLException e) {
+//            throw new DAOException(e);
+//        }
+//    }
+
     @Override
     public void insertOrder(Order order) throws DAOException {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement ps = connection.prepareStatement(INSERT_ORDER)) {
-            prepareStForInsert(order, ps);
-            ps.execute();
+        try (Connection connection = dataSource.getConnection()) {
+            connection.setAutoCommit(false);
+            checkDates(order);
+            LOG.trace("Connection state1: "+connection.getAutoCommit());
+            try (PreparedStatement ps = connection.prepareStatement(INSERT_ORDER)) {
+                prepareStForInsert(order, ps);
+                ps.execute();
+            } catch (SQLException e) {
+                connection.rollback();
+                connection.setAutoCommit(true);
+                LOG.trace("Connection state2: "+connection.getAutoCommit());
+                throw new DAOException(e);
+        }
+            connection.commit();
+            connection.setAutoCommit(true);
+            LOG.trace("Connection state3: "+connection.getAutoCommit());
         } catch (SQLException e) {
             throw new DAOException(e);
         }
+    }
+
+    private void checkDates(Order order) throws DAOException {
+        List<LocalDate> dateList = null;
+        List<LocalDate> orderDateList=getListFromTo(order.getFrom(), order.getTo());
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(SELECT_FROM_TO)) {
+            ps.setInt(1, order.getCar_id());
+            ResultSet rs = ps.executeQuery();
+            String s, e;
+            while (rs.next()) {
+                s = rs.getString(FROM);
+                e = rs.getString(TO);
+                dateList=getListFromTo(s, e);
+            }
+            if(orderDateList.stream().anyMatch(dateList::contains)) {
+                throw new DAODuplicatedDateException();
+            }
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+    }
+
+    private static List<LocalDate> getListFromTo(String s, String e) {
+        List<LocalDate> totalDates = new ArrayList<>();
+        LocalDate start = LocalDate.parse(s);
+        LocalDate end = LocalDate.parse(e);
+        while (!start.isAfter(end)) {
+            totalDates.add(start);
+            start = start.plusDays(1);
+        }
+        return totalDates;
     }
 
     @Override
@@ -139,19 +196,13 @@ public class OrderDAOImpl implements OrderDAO {
              PreparedStatement ps = connection.prepareStatement(ALL_DATES)) {
             ps.setInt(1, car_id);
             ResultSet rs = ps.executeQuery();
-            LOG.trace("Executing query");
             String s, e;
 
             while (rs.next()) {
                 if (!rs.getBoolean(IS_REJECTED) && !rs.getBoolean(IS_RETURNED)) {
                     s = rs.getString(FROM);
                     e = rs.getString(TO);
-                    LocalDate start = LocalDate.parse(s);
-                    LocalDate end = LocalDate.parse(e);
-                    while (!start.isAfter(end)) {
-                        totalDates.add(start);
-                        start = start.plusDays(1);
-                    }
+                    totalDates=getListFromTo(s, e);
                 }
             }
         }catch (SQLException e) {

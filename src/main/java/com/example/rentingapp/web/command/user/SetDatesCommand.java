@@ -6,6 +6,8 @@ import com.example.rentingapp.service.OrderService;
 import com.example.rentingapp.service.ServiceFactory;
 import com.example.rentingapp.web.command.Command;
 import com.example.rentingapp.web.command.CommandType;
+import com.example.rentingapp.web.command.CommandUtil;
+import com.example.rentingapp.web.command.constants.Model;
 import com.example.rentingapp.web.command.constants.Path;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,8 +26,13 @@ public class SetDatesCommand implements Command {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp, CommandType commandType) throws ServiceException {
         OrderService orderService = ServiceFactory.getOrderService();
-        int car_id = Integer.parseInt(req.getParameter(CAR_ID));
-
+        int car_id;
+        if (req.getParameter(CAR_ID)!=null)
+            car_id = Integer.parseInt(req.getParameter(CAR_ID));
+        else {
+            car_id= (int) req.getSession().getAttribute(CAR_ID);
+            req.getSession().removeAttribute(CAR_ID);
+        }
         List<LocalDate> dates;
         try {
             dates = orderService.getDatesByCar(car_id);
@@ -47,6 +54,7 @@ public class SetDatesCommand implements Command {
         req.setAttribute("dates", myArr);
         req.setAttribute(CAR_ID, car_id);
 
+        CommandUtil.setAttrToReq(req, Model.MESSAGE);
         return Path.ORDER_PAGE;
     }
 }

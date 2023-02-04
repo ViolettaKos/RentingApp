@@ -22,7 +22,7 @@ public class OrderServiceImpl implements OrderService {
         try {
            orderDAO.insertOrder(order);
         } catch (DAOException e) {
-            throw new ServiceException(e);
+            throw new ServiceException(e.getMessage());
         }
     }
 

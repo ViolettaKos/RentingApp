@@ -41,7 +41,7 @@
 <div style="margin-top: 150px" class="container">
     <div class="registration mx-auto d-block w-100">
 
-            <tags:alertTag msg="${requestScope.orderMsg}"/>
+            <tags:alertTag msg="${requestScope.msg}"/>
 
         <div class="page-header text-center">
             <h1 style="color: green"><fmt:message key="your.details"/></h1>

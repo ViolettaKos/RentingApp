@@ -16,4 +16,5 @@ public interface OrderStatements {
     String SELECT_ORDER="SELECT * FROM `order` WHERE order_id=?";
     String ALL_DATES="SELECT `from`, `to`, isRejected, isReturned FROM `order` WHERE car_id=?";
     String UPDATE_RETURN="UPDATE `order` SET isReturned=true WHERE order_id=?";
+    String SELECT_FROM_TO="SELECT `from`, `to` FROM `order` WHERE car_id=?";
 }

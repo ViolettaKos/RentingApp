@@ -69,6 +69,10 @@ public final class Validator {
         try {
             Date d1 = sdformat.parse(from);
             Date d2 = sdformat.parse(to);
+            if(d1.before(new Date()) || d2.before(new Date())) {
+                LOG.trace("Date from or to occurs after now Date");
+                throw new IncorrectDataException();
+            }
             if (d1.compareTo(d2) > 0) {
                 LOG.trace("Date from occurs after Date to");
                 throw new IncorrectDataException();
