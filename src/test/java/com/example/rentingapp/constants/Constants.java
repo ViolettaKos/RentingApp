@@ -33,6 +33,8 @@ public interface Constants {
     int TOTAL_PRICE_VAL=550;
     int TOTAL_DAYS_VAL=6;
     String REASON_VAL="Problem with engine.";
+    String FROM_NEW_VAL= "2023-05-03";
+    String TO_NEW_VAL="2023-05-06";
 
 
 }

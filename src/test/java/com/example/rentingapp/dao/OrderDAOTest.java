@@ -1,8 +1,8 @@
 package com.example.rentingapp.dao;
 
 import com.example.rentingapp.dao.DAOImpl.OrderDAOImpl;
+import com.example.rentingapp.exception.DAODuplicatedDateException;
 import com.example.rentingapp.exception.DAOException;
-import com.example.rentingapp.model.Car;
 import com.example.rentingapp.model.Order;
 import com.example.rentingapp.model.OrderInfo;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,13 +39,36 @@ public class OrderDAOTest {
     @Test
     void insertOrderTest() throws SQLException {
         try (PreparedStatement ps = prepareStatements(dataSource)) {
+            when(ps.executeQuery()).thenReturn(rs);
+            when(rs.next()).thenReturn(true).thenReturn(false);
+            when(rs.getString(FROM)).thenReturn(FROM_NEW_VAL);
+            when(rs.getString(TO)).thenReturn(TO_NEW_VAL);
             assertDoesNotThrow(() -> orderDAO.insertOrder(createOrder()));
+        }
+    }
+
+    @Test
+    void insertOrderExcDuplicateTest() throws SQLException {
+        try (PreparedStatement ps = prepareStatements(dataSource)) {
+            when(ps.executeQuery()).thenReturn(rs);
+            when(rs.next()).thenReturn(true).thenReturn(false);
+            when(rs.getString(FROM)).thenReturn(FROM_VAL);
+            when(rs.getString(TO)).thenReturn(TO_VAL);
+            assertThrows(DAODuplicatedDateException.class, () ->  orderDAO.insertOrder(createOrder()));
+
+            when(ps.executeQuery()).thenThrow(new SQLException());
+            assertThrows(DAOException.class, () ->  orderDAO.insertOrder(createOrder()));
         }
     }
 
     @Test
     void insertOrderEXCTest() throws SQLException {
         try (PreparedStatement ps = prepareStatements(dataSource)) {
+            when(ps.executeQuery()).thenReturn(rs);
+            when(rs.next()).thenReturn(true).thenReturn(false);
+            when(rs.getString(FROM)).thenReturn(FROM_NEW_VAL);
+            when(rs.getString(TO)).thenReturn(TO_NEW_VAL);
+
             when(ps.execute()).thenThrow(new SQLException());
             assertThrows(DAOException.class, () ->  orderDAO.insertOrder(createOrder()));
         }

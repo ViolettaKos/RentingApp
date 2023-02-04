@@ -135,6 +135,24 @@ public class UserDAOTest {
     }
 
     @Test
+    void updatePass() throws SQLException {
+        ResultSet rs = mock(ResultSet.class);
+        try (PreparedStatement ps = prepareStatements(dataSource)) {
+            when(ps.executeUpdate()).thenReturn(1);
+            prepareResults(rs);
+            assertDoesNotThrow(() -> userDAO.updatePass(LOGIN_VAL, PASSWORD_VAL));
+        }
+    }
+
+    @Test
+    void updatePassEXC() throws SQLException {
+        try (PreparedStatement ps = prepareStatements(dataSource)) {
+            when(ps.executeUpdate()).thenThrow(new SQLException());
+            assertThrows(DAOException.class, () -> userDAO.updatePass(LOGIN_VAL, PASSWORD_VAL));
+        }
+    }
+
+    @Test
     void sortUsersDBTest() throws SQLException, DAOException {
         ResultSet rs = mock(ResultSet.class);
         try (PreparedStatement ps = prepareStatements(dataSource)) {

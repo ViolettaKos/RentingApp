@@ -183,6 +183,25 @@ public class UserServiceTest {
     }
 
     @Test
+    void getNewPassTest() throws ServiceException {
+        assertDoesNotThrow(() -> userService.getNewPass());
+        assertInstanceOf(String.class, userService.getNewPass());
+    }
+
+    @Test
+    void changePassTest() throws DAOException {
+        doNothing().when(userDAO).updatePass(isA(String.class), isA(String.class));
+        assertDoesNotThrow(() -> userService.changePass(LOGIN_VAL, PASSWORD_VAL));
+    }
+
+    @Test
+    void changePassExcTest() throws DAOException {
+        Exception exc = new DAOException(new SQLException());
+        doThrow(exc).when(userDAO).updatePass(isA(String.class), isA(String.class));
+        assertThrows(ServiceException.class, () -> userService.changePass(LOGIN_VAL, PASSWORD_VAL));
+    }
+
+    @Test
     void checkIfExistsExcTest() throws DAOException {
         Exception exc = new DAOException(new SQLException());
         doThrow(exc).when(userDAO).checkIfExists(isA(String.class));

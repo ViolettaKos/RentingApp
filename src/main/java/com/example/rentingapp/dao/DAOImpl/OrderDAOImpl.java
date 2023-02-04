@@ -29,17 +29,6 @@ public class OrderDAOImpl implements OrderDAO {
         this.dataSource = dataSource;
     }
 
-//    @Override
-//    public void insertOrder(Order order) throws DAOException {
-//        try (Connection connection = dataSource.getConnection();
-//             PreparedStatement ps = connection.prepareStatement(INSERT_ORDER)) {
-//            prepareStForInsert(order, ps);
-//            ps.execute();
-//        } catch (SQLException e) {
-//            throw new DAOException(e);
-//        }
-//    }
-
     @Override
     public void insertOrder(Order order) throws DAOException {
         try (Connection connection = dataSource.getConnection()) {
