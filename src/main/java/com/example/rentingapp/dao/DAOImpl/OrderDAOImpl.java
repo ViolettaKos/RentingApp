@@ -54,6 +54,8 @@ public class OrderDAOImpl implements OrderDAO {
 
     private void checkDates(Order order) throws DAOException {
         List<LocalDate> dateList = null;
+        LOG.trace("FROM: "+order.getFrom());
+        LOG.trace("TO: "+order.getTo());
         List<LocalDate> orderDateList=getListFromTo(order.getFrom(), order.getTo());
         try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(SELECT_FROM_TO)) {
@@ -65,7 +67,7 @@ public class OrderDAOImpl implements OrderDAO {
                 e = rs.getString(TO);
                 dateList=getListFromTo(s, e);
             }
-            if(orderDateList.stream().anyMatch(dateList::contains)) {
+            if (dateList != null && orderDateList.stream().anyMatch(dateList::contains)) {
                 throw new DAODuplicatedDateException();
             }
         } catch (SQLException e) {

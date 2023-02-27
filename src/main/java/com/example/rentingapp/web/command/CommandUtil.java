@@ -112,7 +112,7 @@ public class CommandUtil {
         UserService userService = ServiceFactory.getUserService();
         String where=WHERE_ROLE+USER_DB;
         LOG.trace("String where: "+where);
-        String filter = null;
+        String filter = "";
         if(req.getParameter(BUTTON)!=null) {
             switch (req.getParameter(BUTTON)){
                 case TRUE: {
