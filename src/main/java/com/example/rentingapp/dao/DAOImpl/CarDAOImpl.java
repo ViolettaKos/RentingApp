@@ -18,7 +18,6 @@ import java.util.Set;
 import static com.example.rentingapp.dao.DAOImpl.constants.CarStatements.*;
 
 public class CarDAOImpl implements CarDAO {
-
     private static final Logger LOG = Logger.getLogger(CarDAOImpl.class);
     private final DataSource dataSource;
 
@@ -26,17 +25,26 @@ public class CarDAOImpl implements CarDAO {
         this.dataSource = dataSource;
     }
 
+    /**
+     Retrieves a list of sorted cars from the database based on a specified command and limits the results to a certain range of records.
+     @param command the command to be used for sorting the cars
+     @param start the starting index of the range of records to be retrieved
+     @param recordsPerPage the number of records to be retrieved per page
+     @return a list of Car objects that are sorted according to the specified command and limited to the specified range of records
+     @throws DAOException if there is an error accessing the database
+     */
     @Override
     public List<Car> sortCarsDB(String command, int start, int recordsPerPage) throws DAOException {
         LOG.trace("sortCarsDB method");
         List<Car> sortedCars = new ArrayList<>();
         command = command + " " + LIMIT;
         LOG.trace("Command with limit: " + command);
-        try ( Connection connection = dataSource.getConnection();
-              PreparedStatement ps = connection.prepareStatement(String.format(SORT_CARS, command))) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(String.format(SORT_CARS, command))) {
+
             ps.setInt(1, start);
             ps.setInt(2, recordsPerPage);
-            LOG.trace("Statement: " + ps.toString());
+
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 sortedCars.add(newCar(rs));
@@ -109,6 +117,12 @@ public class CarDAOImpl implements CarDAO {
         }
     }
 
+    /**
+
+     Returns the last inserted ID from the database.
+     @return the last inserted ID from the database.
+     @throws DAOException if there is an error accessing the database
+     */
     @Override
     public String getLastId() throws DAOException {
         String id = null;
@@ -116,12 +130,12 @@ public class CarDAOImpl implements CarDAO {
              Statement st = connection.createStatement()) {
             ResultSet rs = st.executeQuery(SELECT_LAST_ID);
             while (rs.next()) {
-                id=rs.getString(1);
+                id = rs.getString(1);
             }
         } catch (SQLException e) {
             throw new DAOException(e);
         }
-        LOG.trace("Last id: "+id);
+        LOG.trace("Last id: " + id);
         return id;
     }
 
@@ -151,7 +165,7 @@ public class CarDAOImpl implements CarDAO {
         ps.setString(1, car.getBrand());
         ps.setString(2, car.getQuality_class());
         ps.setString(3, car.getName());
-        ps.setInt(4,car.getPrice());
+        ps.setInt(4, car.getPrice());
         ps.setInt(5, car.getId());
     }
 
@@ -163,7 +177,7 @@ public class CarDAOImpl implements CarDAO {
     }
 
     private Car newCar(ResultSet rs) throws SQLException {
-        Car car=new Car();
+        Car car = new Car();
         car.setId(rs.getInt(CAR_ID));
         car.setBrand(rs.getString(BRAND));
         car.setQuality_class(rs.getString(QUALITY));

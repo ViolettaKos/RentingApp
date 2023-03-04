@@ -5,7 +5,8 @@ import java.util.Objects;
 
 public class OrderInfo {
 
-    private int order_id;private int car_id;
+    private int order_id;
+    private int car_id;
     private String login;
     private String from, to;
     private int total_days;
@@ -27,7 +28,7 @@ public class OrderInfo {
         this.total_price = total_price;
     }
 
-    public OrderInfo(int order_id, int car_id, String login,String from, String to, int total_days, boolean option,
+    public OrderInfo(int order_id, int car_id, String login, String from, String to, int total_days, boolean option,
                      boolean isPayed, boolean isRejected, String brand, String name, String quality_class, int car_price,
                      int total_price, String comment, boolean isReturned) {
         this.order_id = order_id;
@@ -42,10 +43,10 @@ public class OrderInfo {
         this.name = name;
         this.quality_class = quality_class;
         this.car_price = car_price;
-        this.total_price=total_price;
-        this.isRejected=isRejected;
-        this.comment=comment;
-        this.isReturned=isReturned;
+        this.total_price = total_price;
+        this.isRejected = isRejected;
+        this.comment = comment;
+        this.isReturned = isReturned;
     }
 
     public boolean isReturned() {
@@ -182,6 +183,6 @@ public class OrderInfo {
 
     @Override
     public int hashCode() {
-        return Objects.hash(order_id, isReturned, car_id, login, from, to, total_days, option, isPayed, isRejected,brand, name, quality_class, car_price, total_price, comment);
+        return Objects.hash(order_id, isReturned, car_id, login, from, to, total_days, option, isPayed, isRejected, brand, name, quality_class, car_price, total_price, comment);
     }
 }

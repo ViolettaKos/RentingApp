@@ -23,15 +23,15 @@ public class UserServiceImpl implements UserService {
     private final UserDAO userDAO;
 
     public UserServiceImpl() {
-        userDAO=AbstractDAO.getInstance().getUserDAO();
+        userDAO = AbstractDAO.getInstance().getUserDAO();
     }
+
     public UserServiceImpl(UserDAO userDAO) {
-        this.userDAO=userDAO;
+        this.userDAO = userDAO;
     }
 
     @Override
     public void add(User user) throws ServiceException {
-        LOG.trace("Add method");
         validateUser(user);
         user.setPassword(HashingPassword.hash(user.getPassword()));
         try {
@@ -43,7 +43,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(User user) throws ServiceException {
-        LOG.trace("update method");
         validateUser(user);
         user.setPassword(HashingPassword.hash(user.getPassword()));
         try {
@@ -55,9 +54,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void checkIfExists(String username) throws ServiceException {
-        LOG.trace("checkIfExists method");
         try {
-            if(userDAO.checkIfExists(username))
+            if (userDAO.checkIfExists(username))
                 throw new DuplicatedLoginException();
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -66,7 +64,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getByLogin(String login) throws ServiceException {
-        LOG.trace("getByLogin method");
         try {
             return userDAO.getUserByLogin(login).orElseThrow(UserNotExistsException::new);
         } catch (DAOException e) {
@@ -76,7 +73,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User login(String login, String pass) throws ServiceException {
-        LOG.trace("login method");
+        validator.validateLogin(login);
+        validator.passIsEmpty(pass);
         User user;
         try {
             user = userDAO.getUserByLogin(login).orElseThrow(UserNotExistsException::new);
@@ -89,7 +87,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean updateMoney(String login, int amount) throws ServiceException {
-        LOG.trace("updateMoney method");
         try {
             return userDAO.changeAmount(amount, login);
         } catch (DAOException e) {
@@ -100,46 +97,41 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> sortUsers(String command, int currentPage, int recordsPerPage) throws ServiceException {
-        LOG.trace("sortUsers method");
-        int start=currentPage*recordsPerPage-recordsPerPage;
-        LOG.trace("Start parameter: "+start);
+        int start = currentPage * recordsPerPage - recordsPerPage;
         try {
             return userDAO.sortUsersDB(command, start, recordsPerPage);
         } catch (DAOException e) {
-            LOG.trace("Error in sorting users");
+            LOG.error("Error in sorting users");
             throw new ServiceException(e);
         }
     }
 
     @Override
     public int getNumberOfRows(String command) throws ServiceException {
-        LOG.trace("getNumberOfRows method");
         try {
             return userDAO.getNumberOfRows(command);
         } catch (DAOException e) {
-            LOG.trace("Error in getting number of rows");
+            LOG.error("Error in getting number of rows");
             throw new ServiceException(e);
         }
     }
 
     @Override
     public void updateStatus(String login, boolean action) throws ServiceException {
-        LOG.trace("updateStatus method");
         try {
             userDAO.updateStatus(login, action);
         } catch (DAOException e) {
-            LOG.trace("Error in updateStatus");
+            LOG.error("Error in updateStatus");
             throw new ServiceException(e);
         }
     }
 
     @Override
     public void changePass(String username, String newPass) throws ServiceException {
-        LOG.trace("changePass method");
         try {
             userDAO.updatePass(username, newPass);
         } catch (DAOException e) {
-            LOG.trace("Error in updateStatus");
+            LOG.error("Error in updateStatus");
             throw new ServiceException(e);
         }
     }

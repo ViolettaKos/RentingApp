@@ -21,7 +21,6 @@ import static com.example.rentingapp.dao.DAOImpl.constants.Fields.*;
 import static com.example.rentingapp.dao.DAOImpl.constants.OrderStatements.*;
 
 public class OrderDAOImpl implements OrderDAO {
-
     private static final Logger LOG = Logger.getLogger(OrderDAOImpl.class);
     private final DataSource dataSource;
 
@@ -34,29 +33,34 @@ public class OrderDAOImpl implements OrderDAO {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(false);
             checkDates(order);
-            LOG.trace("Connection state1: "+connection.getAutoCommit());
+
             try (PreparedStatement ps = connection.prepareStatement(INSERT_ORDER)) {
                 prepareStForInsert(order, ps);
                 ps.execute();
             } catch (SQLException e) {
                 connection.rollback();
                 connection.setAutoCommit(true);
-                LOG.trace("Connection state2: "+connection.getAutoCommit());
                 throw new DAOException(e);
-        }
+            }
             connection.commit();
             connection.setAutoCommit(true);
-            LOG.trace("Connection state3: "+connection.getAutoCommit());
         } catch (SQLException e) {
             throw new DAOException(e);
         }
     }
 
+
+    /**
+     * Checks whether the date range of an order overlaps with the date range of any existing orders for the same car.
+     *
+     * @param order the order to check
+     * @throws DAOException if an error occurs while accessing the database
+     * @throws DAODuplicatedDateException if the order's date range overlaps with another order's date range for the same car
+     */
     private void checkDates(Order order) throws DAOException {
         List<LocalDate> dateList = null;
-        LOG.trace("FROM: "+order.getFrom());
-        LOG.trace("TO: "+order.getTo());
-        List<LocalDate> orderDateList=getListFromTo(order.getFrom(), order.getTo());
+        LOG.trace("FROM: " + order.getFrom() + " TO: " + order.getTo());
+        List<LocalDate> orderDateList = getListFromTo(order.getFrom(), order.getTo());
         try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(SELECT_FROM_TO)) {
             ps.setInt(1, order.getCar_id());
@@ -65,7 +69,7 @@ public class OrderDAOImpl implements OrderDAO {
             while (rs.next()) {
                 s = rs.getString(FROM);
                 e = rs.getString(TO);
-                dateList=getListFromTo(s, e);
+                dateList = getListFromTo(s, e);
             }
             if (dateList != null && orderDateList.stream().anyMatch(dateList::contains)) {
                 throw new DAODuplicatedDateException();
@@ -75,6 +79,12 @@ public class OrderDAOImpl implements OrderDAO {
         }
     }
 
+    /**
+     Returns a list of LocalDate objects generated from the start and end dates given as string inputs.
+     @param s the starting date as a string in the format "yyyy-MM-dd"
+     @param e the ending date as a string in the format "yyyy-MM-dd"
+     @return a list of LocalDate objects representing each date between the start and end dates (inclusive)
+     */
     private static List<LocalDate> getListFromTo(String s, String e) {
         List<LocalDate> totalDates = new ArrayList<>();
         LocalDate start = LocalDate.parse(s);
@@ -113,9 +123,16 @@ public class OrderDAOImpl implements OrderDAO {
         }
     }
 
+    /**
+     Retrieves a list of sorted orders from the database based on a specified command and limits the results to a certain range of records.
+     @param command the command to be used for sorting the cars
+     @param start the starting index of the range of records to be retrieved
+     @param recordsPerPage the number of records to be retrieved per page
+     @return a list of Car objects that are sorted according to the specified command and limited to the specified range of records
+     @throws DAOException if there is an error accessing the database
+     */
     @Override
     public List<Order> sortOrdersDB(String command, int start, int recordsPerPage) throws DAOException {
-        LOG.trace("sortOrdersDB method");
         List<Order> sortedOrders = new ArrayList<>();
         command = command + " " + LIMIT;
         LOG.trace("Command with limit: " + command);
@@ -123,7 +140,7 @@ public class OrderDAOImpl implements OrderDAO {
              PreparedStatement ps = connection.prepareStatement(String.format(SORT_ORDERS, command))) {
             ps.setInt(1, start);
             ps.setInt(2, recordsPerPage);
-            LOG.trace("Statement: " + ps.toString());
+
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 sortedOrders.add(newOrder(rs));
@@ -180,6 +197,14 @@ public class OrderDAOImpl implements OrderDAO {
         }
     }
 
+
+    /**
+     * Retrieves a list of all the dates that a car with the given ID is reserved for but has not yet been returned or rejected.
+     *
+     * @param car_id the ID of the car to retrieve the reserved dates for
+     * @return a list of all the reserved dates for the car
+     * @throws DAOException if there is an error accessing the database
+     */
     @Override
     public List<LocalDate> getDatesByCar(int car_id) throws DAOException {
         List<LocalDate> totalDates = new ArrayList<>();
@@ -193,10 +218,10 @@ public class OrderDAOImpl implements OrderDAO {
                 if (!rs.getBoolean(IS_REJECTED) && !rs.getBoolean(IS_RETURNED)) {
                     s = rs.getString(FROM);
                     e = rs.getString(TO);
-                    totalDates=getListFromTo(s, e);
+                    totalDates = getListFromTo(s, e);
                 }
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             throw new DAOException(e);
         }
         return totalDates;
@@ -247,21 +272,13 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     private void prepareStForInsert(Order order, PreparedStatement ps) throws SQLException {
-        LOG.trace("Preparing statements for insert");
         ps.setString(1, order.getLogin());
-        LOG.trace("Login: " + order.getLogin());
         ps.setInt(2, order.getTotal_price());
-        LOG.trace("Total price: " + order.getTotal_price());
         ps.setInt(3, order.getCar_id());
-        LOG.trace("Car id: " + order.getCar_id());
         ps.setDate(4, Date.valueOf(order.getFrom()));
-        LOG.trace("From: " + order.getFrom());
         ps.setDate(5, Date.valueOf(order.getTo()));
-        LOG.trace("To: " + order.getTo());
         ps.setInt(6, (int) order.getTotal_days());
-        LOG.trace("Total days: " + (int) order.getTotal_days());
         ps.setBoolean(7, order.isOption());
-        LOG.trace("Option: " + order.isOption());
     }
 
     private OrderInfo newOrderInfo(ResultSet rs) throws SQLException {

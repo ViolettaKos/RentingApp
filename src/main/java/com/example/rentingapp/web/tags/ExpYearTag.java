@@ -9,8 +9,8 @@ import java.time.LocalDate;
 public class ExpYearTag extends SimpleTagSupport {
     @Override
     public void doTag() throws IOException {
-        JspWriter out= getJspContext().getOut();
-        String expYear= String.valueOf(LocalDate.now().plusYears(5).getYear());
+        JspWriter out = getJspContext().getOut();
+        String expYear = String.valueOf(LocalDate.now().plusYears(5).getYear());
         out.print(expYear);
     }
 }

@@ -6,11 +6,11 @@ import java.util.Set;
 import static com.example.rentingapp.web.command.constants.Commands.*;
 
 public final class CommandAccess {
-    private static final Set<String> guestCommands=new HashSet<>();
-    private static final Set<String> userCommands=new HashSet<>();
-    private static final Set<String> adminCommands=new HashSet<>();
-    private static final Set<String> managerCommands=new HashSet<>();
-    private static final Set<String> loggedCommands=new HashSet<>();
+    private static final Set<String> guestCommands = new HashSet<>();
+    private static final Set<String> userCommands = new HashSet<>();
+    private static final Set<String> adminCommands = new HashSet<>();
+    private static final Set<String> managerCommands = new HashSet<>();
+    private static final Set<String> loggedCommands = new HashSet<>();
 
     static {
         guestCommands.add(USER_REG);
@@ -64,12 +64,15 @@ public final class CommandAccess {
     public static Set<String> getGuestCommands() {
         return guestCommands;
     }
+
     public static Set<String> getUserCommands() {
         return userCommands;
     }
+
     public static Set<String> getAdminCommands() {
         return adminCommands;
     }
+
     public static Set<String> getManagerCommands() {
         return managerCommands;
     }

@@ -25,15 +25,15 @@ public class UserDAOImpl implements UserDAO {
 
     private static final Logger LOG = Logger.getLogger(UserDAOImpl.class);
     private final DataSource dataSource;
+
     public UserDAOImpl(DataSource dataSource) {
         this.dataSource = dataSource;
-        LOG.trace("Datasource in constructor: "+dataSource.toString());
     }
 
     @Override
     public void addUser(User user) throws DAOException {
-        try (Connection connection=dataSource.getConnection();
-             PreparedStatement ps= connection.prepareStatement(INSERT_USER)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(INSERT_USER)) {
             prepareStForInsert(user, ps);
             ps.execute();
         } catch (SQLException e) {
@@ -43,8 +43,8 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void updateUser(User user) throws DAOException {
-        try (Connection connection=dataSource.getConnection();
-             PreparedStatement ps= connection.prepareStatement(UPDATE_USER)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(UPDATE_USER)) {
             prepareStForUpdate(user, ps);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -56,15 +56,12 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public Optional<User> getUserByLogin(String login) throws DAOException {
         User user = null;
-        try (Connection connection=dataSource.getConnection();
-             PreparedStatement ps= connection.prepareStatement(SELECT_USER_BY_LOGIN)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(SELECT_USER_BY_LOGIN)) {
             ps.setString(1, login);
-            LOG.trace("Statement to get user from database by login: " + ps.toString());
             ResultSet rs = ps.executeQuery();
-            LOG.trace("Getting user...");
             if (rs.next()) {
                 user = newUser(rs);
-                LOG.trace("Obtained user: " + user);
             }
         } catch (SQLException e) {
             throw new DAOException(e);
@@ -74,10 +71,9 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public boolean checkIfExists(String username) throws DAOException {
-        try (Connection connection=dataSource.getConnection();
-             PreparedStatement ps= connection.prepareStatement(SELECT_USER_BY_LOGIN)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(SELECT_USER_BY_LOGIN)) {
             ps.setString(1, username);
-            LOG.trace("Statement to get user from database by login: " + ps.toString());
             ResultSet rs = ps.executeQuery();
             if (!rs.next()) {
                 LOG.trace("No such user in DB");
@@ -91,8 +87,6 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public boolean changeAmount(int amount, String login) throws DAOException {
-        LOG.trace("Entering changeAmount");
-        LOG.trace("Amount of money: " + amount);
         if (amount > 0) {
             LOG.trace("Adding money in process");
             addMoney(amount, login);
@@ -103,13 +97,20 @@ public class UserDAOImpl implements UserDAO {
         return true;
     }
 
+    /**
+     Retrieves a list of sorted users from the database based on a specified command and limits the results to a certain range of records.
+     @param command the command to be used for sorting the users
+     @param start the starting index of the range of records to be retrieved
+     @param recordsPerPage the number of records to be retrieved per page
+     @return a list of User objects that are sorted according to the specified command and limited to the specified range of records
+     @throws DAOException if there is an error accessing the database
+     */
     @Override
     public List<User> sortUsersDB(String command, int start, int recordsPerPage) throws DAOException {
-        LOG.trace("sortUsersDB method");
         List<User> sortedUsers = new ArrayList<>();
-        command =command + " " + LIMIT;
-        try ( Connection connection = dataSource.getConnection();
-              PreparedStatement ps = connection.prepareStatement(String.format(SORT_USERS, command))) {
+        command = command + " " + LIMIT;
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(String.format(SORT_USERS, command))) {
             ps.setInt(1, start);
             ps.setInt(2, recordsPerPage);
             ResultSet rs = ps.executeQuery();
@@ -124,7 +125,6 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public int getNumberOfRows(String filter) throws DAOException {
-        LOG.trace("getNumberOfRows method");
         int records = 0;
         LOG.trace("Filter: " + filter);
         String command = String.format(GET_NUMBER_OF_RECORDS_USER, filter);
@@ -172,7 +172,6 @@ public class UserDAOImpl implements UserDAO {
             ps.setString(1, String.valueOf(amount));
             ps.setString(2, String.valueOf(amount));
             ps.setString(3, login);
-            LOG.trace("Statement to update amount of money: " + ps.toString());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException(e);
@@ -186,7 +185,6 @@ public class UserDAOImpl implements UserDAO {
             ps.setString(1, String.valueOf(amount));
             ps.setString(2, String.valueOf(amount));
             ps.setString(3, login);
-            LOG.trace("Statement to update amount of money: " + ps.toString());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException(e);
@@ -196,40 +194,26 @@ public class UserDAOImpl implements UserDAO {
 
     private void prepareStForInsert(User obj, PreparedStatement ps) throws SQLException {
         ps.setString(1, obj.getEmail());
-        LOG.trace("Email: " + obj.getEmail());
         ps.setString(2, obj.getTelephone());
-        LOG.trace("Number: " + obj.getTelephone());
         ps.setString(3, obj.getPassword());
-        LOG.trace("Password: " + obj.getPassword());
         ps.setString(4, obj.getFirstName());
-        LOG.trace("First name: " + obj.getFirstName());
         ps.setString(5, obj.getLastName());
-        LOG.trace("Last name: " + obj.getLastName());
         ps.setString(6, obj.getUsername());
-        LOG.trace("Username: " + obj.getUsername());
         ps.setString(7, obj.getRole());
-        LOG.trace("Role: " + obj.getRole());
     }
 
-    private void prepareStForUpdate(User obj, PreparedStatement ps) throws SQLException{
+    private void prepareStForUpdate(User obj, PreparedStatement ps) throws SQLException {
         ps.setString(5, obj.getEmail());
-        LOG.trace("Email: " + obj.getEmail());
         ps.setString(6, obj.getTelephone());
-        LOG.trace("Number: " + obj.getTelephone());
         ps.setString(4, obj.getPassword());
-        LOG.trace("Password: " + obj.getPassword());
         ps.setString(1, obj.getFirstName());
-        LOG.trace("First name: " + obj.getFirstName());
         ps.setString(2, obj.getLastName());
-        LOG.trace("Last name: " + obj.getLastName());
         ps.setString(3, obj.getUsername());
-        LOG.trace("Username: " + obj.getUsername());
         ps.setInt(7, obj.getId());
-        LOG.trace("id: " + obj.getId());
     }
 
     private User newUser(ResultSet rs) throws SQLException {
-        User user=new User();
+        User user = new User();
         user.setId(rs.getInt(USER_ID));
         user.setFirstName(rs.getString(FIRST_NAME));
         user.setLastName(rs.getString(LAST_NAME));

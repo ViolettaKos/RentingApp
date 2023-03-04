@@ -25,16 +25,17 @@ public class User extends Entity {
 
     public User(String fn, String ln, String username, String email, String pass, String number, Role role,
                 boolean blocked, int money) {
-        this.firstName=fn;
-        this.lastName=ln;
+        this.firstName = fn;
+        this.lastName = ln;
         this.username = username;
         this.email = email;
         this.password = pass;
-        this.telephone=number;
-        this.role=role.getName();
-        this.money=money;
+        this.telephone = number;
+        this.role = role.getName();
+        this.money = money;
         this.blocked = blocked;
     }
+
     public User() {
     }
 

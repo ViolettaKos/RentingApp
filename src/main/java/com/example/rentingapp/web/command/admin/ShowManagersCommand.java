@@ -14,10 +14,9 @@ import static com.example.rentingapp.web.command.constants.Commands.COMMAND;
 import static com.example.rentingapp.web.command.constants.Model.MANAGER;
 
 public class ShowManagersCommand implements Command {
-    private static final Logger LOG = Logger.getLogger(ShowManagersCommand.class);
+
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse response, CommandType commandType) throws ServiceException {
-        LOG.debug("Start executing Command");
         pagination(req, sortCommand(req), MANAGER);
         req.setAttribute(COMMAND, req.getParameter(COMMAND));
         return Path.ADMIN_MNG_PAGE;

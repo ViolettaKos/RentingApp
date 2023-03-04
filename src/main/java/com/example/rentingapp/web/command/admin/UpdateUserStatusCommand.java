@@ -21,21 +21,23 @@ public class UpdateUserStatusCommand implements Command {
 
     private static final Logger LOG = Logger.getLogger(UpdateUserStatusCommand.class);
     private final EmailSender emailSender;
+
     public UpdateUserStatusCommand(EmailContext emailContext) {
-        emailSender=emailContext.getEmailSender();
+        emailSender = emailContext.getEmailSender();
     }
+
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse response, CommandType commandType) throws ServiceException {
-        String login=req.getParameter(LOGIN);
+        String login = req.getParameter(LOGIN);
         doAction(req, login);
         return CommandUtil.redirectCommand(SHOW_ADMIN_USERS);
     }
 
     private void doAction(HttpServletRequest req, String login) throws ServiceException {
-        UserService userService= ServiceFactory.getUserService();
-        User user=userService.getByLogin(login);
-        boolean action= Boolean.parseBoolean(req.getParameter(ACTION));
-        LOG.trace("To block? "+action);
+        UserService userService = ServiceFactory.getUserService();
+        User user = userService.getByLogin(login);
+        boolean action = Boolean.parseBoolean(req.getParameter(ACTION));
+        LOG.trace("To block? " + action);
         sendInfoAccount(user, action);
         userService.updateStatus(login, action);
         user.setBlocked(action);
@@ -45,8 +47,7 @@ public class UpdateUserStatusCommand implements Command {
         if (action) {
             String body = String.format(MESSAGE_BLOCKED, user.getFirstName());
             new Thread(() -> emailSender.send(user.getEmail(), TOPIC_BLOCKED, body)).start();
-        }
-        else {
+        } else {
             String body = String.format(MESSAGE_UNBLOCKED, user.getFirstName());
             new Thread(() -> emailSender.send(user.getEmail(), TOPIC_UNBLOCKED, body)).start();
         }

@@ -27,12 +27,12 @@ table tbody tr:nth-child(odd) {
 
 
 .btn-group button {
-    background-color: green; /* Green background */
-    border: 1px solid green; /* Green border */
-    color: white; /* White text */
-    padding: 10px 24px; /* Some padding */
-    cursor: pointer; /* Pointer/hand icon */
-    float: left; /* Float the buttons side by side */
+    background-color: green;
+    border: 1px solid green;
+    color: white;
+    padding: 10px 24px;
+    cursor: pointer;
+    float: left;
 }
 
 .btn-group button:not(:last-child) {
@@ -46,7 +46,6 @@ table tbody tr:nth-child(odd) {
     display: table;
 }
 
-/* Add a background color on hover */
 .btn-group button:hover {
     background-color: #3e8e41;
 }

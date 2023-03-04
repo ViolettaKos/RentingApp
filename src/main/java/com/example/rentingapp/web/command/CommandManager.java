@@ -22,7 +22,7 @@ public class CommandManager {
 
     private static final Logger LOG = Logger.getLogger(CommandManager.class);
     private final Map<String, Command> commands;
-    private static final EmailContext EMAIL_CONTEXT=EmailContext.getEmailContext();
+    private static final EmailContext EMAIL_CONTEXT = EmailContext.getEmailContext();
 
     public CommandManager() {
 
@@ -70,8 +70,8 @@ public class CommandManager {
     }
 
     public Command defineCommand(String command) {
-        if (command==null || !commands.containsKey(command)) {
-            LOG.trace("Command "+ command+ " do not exists!");
+        if (command == null || !commands.containsKey(command)) {
+            LOG.trace("Command " + command + " do not exists!");
             return commands.get("error");
         }
         return commands.get(command);

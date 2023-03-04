@@ -34,46 +34,45 @@ import java.util.List;
 
 public class MakeOrderCommand implements Command {
     private static final Logger LOG = Logger.getLogger(MakeOrderCommand.class);
-    private final Validator validator=new Validator();
+    private final Validator validator = new Validator();
     private final EmailSender emailSender;
+
     public MakeOrderCommand(EmailContext emailContext) {
-        emailSender=emailContext.getEmailSender();
+        emailSender = emailContext.getEmailSender();
     }
 
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, CommandType commandType) throws ServiceException {
-        LOG.debug("Start executing Command");
-        return CommandType.GET==commandType ? doGet(request) : doPost(request);
+        return CommandType.GET == commandType ? doGet(request) : doPost(request);
     }
 
-    private String doPost(HttpServletRequest req) throws ServiceException {
-        String age=req.getParameter(AGE);
-        String from=req.getParameter(FROM);
-        String to=req.getParameter(TO);
-        LOG.trace("From: "+from);
-        LOG.trace("To: "+to);
-        boolean option= Boolean.parseBoolean(req.getParameter(OPTION));
-        int car_id=Integer.parseInt(req.getParameter(CAR_ID));
-        User user = (User) req.getSession().getAttribute(LOGGED);
-        String login=user.getUsername();
+    private String doPost(HttpServletRequest req) {
+        String age = req.getParameter(AGE);
+        String from = req.getParameter(FROM);
+        String to = req.getParameter(TO);
 
-        String path=Path.MY_ORDERS;
+        boolean option = Boolean.parseBoolean(req.getParameter(OPTION));
+        int car_id = Integer.parseInt(req.getParameter(CAR_ID));
+        User user = (User) req.getSession().getAttribute(LOGGED);
+        String login = user.getUsername();
+
+        String path = Path.MY_ORDERS;
         try {
-            CarsService carsService=ServiceFactory.getCarsService();
-            Car car=carsService.getCarById(String.valueOf(car_id));
+            CarsService carsService = ServiceFactory.getCarsService();
+            Car car = carsService.getCarById(String.valueOf(car_id));
             validator.checkAge(age);
             validator.checkDate(from, to);
-            long days=countDays(from, to);
-            int total_price= (int) (days*car.getPrice());
+            long days = countDays(from, to);
+            int total_price = (int) (days * car.getPrice());
 
-            Order order=new Order(login, false, false, total_price, car_id, from, to, days, option, "", false);
+            Order order = new Order(login, false, false, total_price, car_id, from, to, days, option, "", false);
             OrderService orderService = ServiceFactory.getOrderService();
             orderService.putOrder(order);
             sendConfirmation(user);
 
         } catch (ServiceException e) {
-            LOG.trace("Error in executing command");
+            LOG.error("Error in executing command");
             req.getSession().setAttribute(Model.MESSAGE, e.getMessage());
             return CommandUtil.redirectCommand(Commands.SET_DATES, CAR_ID, String.valueOf(car_id));
         }
@@ -89,24 +88,24 @@ public class MakeOrderCommand implements Command {
 
     private String doGet(HttpServletRequest req) {
         CommandUtil.setAttrToReq(req, Model.MESSAGE);
-        LOG.trace("Path: "+CommandUtil.getPath(req));
         return CommandUtil.getPath(req);
     }
 
     public long countDays(String from, String to) throws IncorrectDataException {
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         long days;
-        if(from.equals(to)) {
+        if (from.equals(to)) {
             return 1;
         } else {
             try {
-                Date fromDate=sdf.parse(from);
-                Date toDate=sdf.parse(to);
-                days=toDate.getTime()-fromDate.getTime();
+                Date fromDate = sdf.parse(from);
+                Date toDate = sdf.parse(to);
+                days = toDate.getTime() - fromDate.getTime();
             } catch (ParseException e) {
-                LOG.trace("Exception while parsing dates");
+                LOG.error("Exception while parsing dates");
                 throw new IncorrectDataException();
             }
-            return days/1000/60/60/24; }
+            return days / 1000 / 60 / 60 / 24;
+        }
     }
 }

@@ -14,11 +14,8 @@ import static com.example.rentingapp.web.command.constants.Model.CAR;
 
 public class ShowCarsCommand implements Command {
 
-    private static final Logger LOG = Logger.getLogger(ShowCarsCommand.class);
-
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp, CommandType commandType) throws ServiceException {
-        LOG.debug("Start executing Command");
         pagination(req, sortCommand(req), CAR);
         req.setAttribute(COMMAND, req.getParameter(COMMAND));
         return Path.BOOK_PAGE;

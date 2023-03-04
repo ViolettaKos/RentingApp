@@ -14,13 +14,11 @@ import org.apache.log4j.Logger;
 import static com.example.rentingapp.web.command.constants.Model.*;
 
 public class ShowMyOrdersCommand implements Command {
-    private static final Logger LOG = Logger.getLogger(ShowMyOrdersCommand.class);
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse response, CommandType commandType) throws ServiceException {
-        LOG.debug("Start executing Command");
-        OrderService orderService= ServiceFactory.getOrderService();
-        User user= (User) req.getSession().getAttribute(LOGGED);
+        OrderService orderService = ServiceFactory.getOrderService();
+        User user = (User) req.getSession().getAttribute(LOGGED);
         req.setAttribute(ORDERS, orderService.getOrdersByLogin(user.getUsername()));
         return Path.MY_ORDERS;
     }

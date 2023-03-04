@@ -17,36 +17,33 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
-import static com.example.rentingapp.dao.DAOImpl.constants.Fields.LOGIN;
+import static com.example.rentingapp.dao.DAOImpl.constants.Fields.*;
 import static com.example.rentingapp.web.command.constants.Commands.DISPLAY_INFO_MNG;
 import static com.example.rentingapp.web.command.constants.Commands.SHOW_ADMIN_MANAGERS;
+import static com.example.rentingapp.web.command.constants.Model.*;
+import static com.example.rentingapp.web.command.constants.Model.LAST_NAME;
+import static com.example.rentingapp.web.command.constants.Model.PASS;
 
 public class EditManagerCommand implements Command {
     private static final Logger LOG = Logger.getLogger(EditCommand.class);
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, CommandType commandType) throws ServiceException {
-        LOG.debug("Start executing Command");
         return CommandType.GET == commandType ? doGet(request) : doPost(request);
     }
 
     private String doPost(HttpServletRequest req) throws ServiceException {
-        String firstname = req.getParameter("firstname");
-        LOG.trace("Request parameter: fn --> " + firstname);
-        String lastname = req.getParameter("lastname");
-        LOG.trace("Request parameter: ln --> " + lastname);
-        String username = req.getParameter("username");
-        LOG.trace("Request parameter: username --> " + username);
-        String pass = req.getParameter("pass");
-        LOG.trace("Request parameter: pass --> " + pass);
-        String email = req.getParameter("email");
-        LOG.trace("Request parameter: email --> " + email);
-        String telephone = req.getParameter("telephone");
+        String firstname = req.getParameter(FIRSTNAME);
+        String lastname = req.getParameter(LAST_NAME);
+        String username = req.getParameter(USERNAME);
+        String pass = req.getParameter(PASS);
+        String email = req.getParameter(EMAIL);
+        String telephone = req.getParameter(TELEPHONE);
         String path = Path.ADMIN_MNG_PAGE;
-        String command=SHOW_ADMIN_MANAGERS;
+        String command = SHOW_ADMIN_MANAGERS;
         try {
             UserService userService = ServiceFactory.getUserService();
-            User user=userService.getByLogin(req.getParameter(LOGIN));
+            User user = userService.getByLogin(req.getParameter(LOGIN));
             if (!username.equals(user.getUsername())) {
                 userService.checkIfExists(username);
             }
@@ -60,10 +57,10 @@ public class EditManagerCommand implements Command {
             userService.update(user);
 
         } catch (IncorrectDataException | IncorrectEmailException | DuplicatedLoginException e) {
-            LOG.trace("Error in executing command");
+            LOG.error("Error in executing command");
             req.getSession().setAttribute(Model.MESSAGE, e.getMessage());
             path = Path.EDIT_MANAGER_PAGE;
-            command=DISPLAY_INFO_MNG;
+            command = DISPLAY_INFO_MNG;
         }
         req.getSession().setAttribute(Path.CURRENT_PATH, path);
         return CommandUtil.redirectCommand(command);
@@ -71,7 +68,6 @@ public class EditManagerCommand implements Command {
 
     private String doGet(HttpServletRequest request) {
         CommandUtil.setAttrToReq(request, Model.MESSAGE);
-        LOG.trace("Path: " + CommandUtil.getPath(request));
         return CommandUtil.getPath(request);
     }
 }

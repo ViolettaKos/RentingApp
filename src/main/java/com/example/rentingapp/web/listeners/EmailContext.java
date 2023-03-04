@@ -14,12 +14,12 @@ public class EmailContext {
 
     private EmailContext(ServletContext sc, String file) {
         Properties properties = loadProperties(file);
-        emailSender=new EmailSender(properties);
+        emailSender = new EmailSender(properties);
     }
 
     private static Properties loadProperties(String file) {
         Properties properties = new Properties();
-        try (InputStream resource = EmailContext.class.getClassLoader().getResourceAsStream(file)){
+        try (InputStream resource = EmailContext.class.getClassLoader().getResourceAsStream(file)) {
             properties.load(resource);
         } catch (Exception e) {
             LOG.error(e.getMessage());
@@ -33,8 +33,8 @@ public class EmailContext {
         return properties;
     }
 
-    public static void setContext(ServletContext sc, String file){
-        emailContext=new EmailContext(sc, file);
+    public static void setContext(ServletContext sc, String file) {
+        emailContext = new EmailContext(sc, file);
     }
 
     public static EmailContext getEmailContext() {

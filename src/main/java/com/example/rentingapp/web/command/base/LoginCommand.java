@@ -10,6 +10,7 @@ import com.example.rentingapp.service.ServiceFactory;
 import com.example.rentingapp.service.UserService;
 import com.example.rentingapp.web.command.Command;
 import com.example.rentingapp.web.command.CommandType;
+
 import static com.example.rentingapp.web.command.CommandUtil.*;
 
 import com.example.rentingapp.web.command.constants.Commands;
@@ -22,20 +23,25 @@ import org.apache.log4j.Logger;
 public class LoginCommand implements Command {
     private static final Logger LOG = Logger.getLogger(LoginCommand.class);
     private final UserService userService;
-    public LoginCommand() { this.userService=ServiceFactory.getUserService();}
-    public LoginCommand(UserService userService) {this.userService=userService;}
+
+    public LoginCommand() {
+        this.userService = ServiceFactory.getUserService();
+    }
+
+    public LoginCommand(UserService userService) {
+        this.userService = userService;
+    }
+
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, CommandType commandType) {
-        LOG.debug("Start executing Command");
-        return CommandType.GET==commandType ? doGet(request) : doPost(request);
+        return CommandType.GET == commandType ? doGet(request) : doPost(request);
     }
 
     private String doPost(HttpServletRequest request) {
-        String login=request.getParameter(LOGIN);
-        String pass=request.getParameter(PASS);
-        LOG.trace("Login: "+login+" pass: "+pass);
+        String login = request.getParameter(LOGIN);
+        String pass = request.getParameter(PASS);
         try {
-            User user=userService.login(login, pass);
+            User user = userService.login(login, pass);
             request.getSession().setAttribute(Model.LOGGED, user);
             request.getSession().setAttribute(Fields.ROLE, user.getRole());
             return Path.PROFILE_PAGE;

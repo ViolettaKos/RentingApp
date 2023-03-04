@@ -1,5 +1,6 @@
 package com.example.rentingapp.web.command.admin;
 
+import com.example.rentingapp.exception.IncorrectDataException;
 import com.example.rentingapp.exception.ServiceException;
 import com.example.rentingapp.model.Car;
 import com.example.rentingapp.service.CarsService;
@@ -34,31 +35,44 @@ public class AddCarCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, CommandType commandType) throws ServiceException {
-        return CommandType.GET==commandType ? doGet(request) : doPost(request);
+        return CommandType.GET == commandType ? doGet(request) : doPost(request);
     }
 
     private String doPost(HttpServletRequest req) throws ServiceException {
-        String brand = req.getParameter(BRAND);
-        String name = req.getParameter(NAME);
-        String quality = req.getParameter(QUALITY);
-        int price = Integer.parseInt(req.getParameter(PRICE));
         String path = ADMIN_CARS_PAGE;
-        Car car=new Car(brand, quality, name, price);
-        CarsService carsService=ServiceFactory.getCarsService();
-        carsService.addCar(car);
-        String fileName= carsService.getLastId();
         try {
+            if (checkIsEmpty(req))
+                throw new IncorrectDataException();
+            String brand = req.getParameter(BRAND);
+            String name = req.getParameter(NAME);
+            String quality = req.getParameter(QUALITY);
+            int price = Integer.parseInt(req.getParameter(PRICE));
+            Car car = new Car(brand, quality, name, price);
+            CarsService carsService = ServiceFactory.getCarsService();
+            carsService.addCar(car);
+            String fileName = carsService.getLastId();
             imgProcessing(req, fileName, brand);
-        } catch (ServletException | IOException e) {
-            LOG.trace("Error in extracting parts");
+        } catch (ServletException | IncorrectDataException | IOException e) {
+            LOG.error("Error in extracting parts");
             path = ERROR_PAGE;
         }
         req.getSession().setAttribute(Path.CURRENT_PATH, path);
         return redirectCommand(SHOW_ADMIN_CARS);
     }
 
+
+    /**
+     * This method processes the uploaded images of a car and its brand logo.
+     * It takes in the HttpServletRequest object, file name as ID of last inserted car in table and brand name to upload
+     * the images to their paths.
+     * @param req the HttpServletRequest object which contains the uploaded images
+     * @param fileName the name of the file to be uploaded
+     * @param brand the brand name of the car for which the logo will be uploaded
+     * @throws ServletException if there is an issue with the servlet
+     * @throws IOException if there is an issue with the I/O
+     */
     private void imgProcessing(HttpServletRequest req, String fileName, String brand) throws ServletException, IOException {
-        Collection<Part> parts=req.getParts();
+        Collection<Part> parts = req.getParts();
         String path;
         for (Part part : parts) {
             if (part.getName().equals(FILE)) {
@@ -66,7 +80,7 @@ public class AddCarCommand implements Command {
                 path = CAR_IMG;
                 uploadFile(part, fileName, path);
             }
-            if(part.getName().equals(LOGO)) {
+            if (part.getName().equals(LOGO)) {
                 LOG.trace("File logo upload");
                 path = BRAND_IMG;
                 uploadFile(part, brand.toLowerCase(), path);
@@ -74,28 +88,38 @@ public class AddCarCommand implements Command {
         }
     }
 
+    /**
+     * A utility method for uploading a file to the specified path.
+     * @param filePart the part of the HTTP request containing the file to upload
+     * @param fileName the name of the file to upload
+     * @param path the path where the file will be uploaded to
+     */
     private void uploadFile(Part filePart, String fileName, String path) {
         try (OutputStream otpStream = Files.newOutputStream(new File(path + File.separator + fileName + ".jpg").toPath());
              InputStream iptStream = filePart.getInputStream()) {
-            // initialize instances of OutputStream and InputStream classes
-            int read = 0;
+            int read;
 
             // initialize bytes array for storing file data
             final byte[] bytes = new byte[1024];
 
-            // use while loop to read data from the file using iptStream and write into  the desination folder using writer and otpStream
+            // use while loop to read data from the file using iptStream and write into  the destination folder using writer and otpStream
             while ((read = iptStream.read(bytes)) != -1) {
                 otpStream.write(bytes, 0, read);
             }
 
         } catch (IOException e) {
-            LOG.trace("Failed to upload file"+e);
+            LOG.error("Failed to upload file" + e);
         }
     }
 
     private String doGet(HttpServletRequest request) throws ServiceException {
-        CarsService carsService= ServiceFactory.getCarsService();
+        CarsService carsService = ServiceFactory.getCarsService();
         request.setAttribute(BRAND, carsService.getBrands());
         return ADD_CAR_PAGE;
+    }
+
+    private static boolean checkIsEmpty(HttpServletRequest req) {
+        return !req.getParameter(BRAND).isEmpty() || !req.getParameter(NAME).isEmpty() || !req.getParameter(PRICE).isEmpty()
+                || !req.getParameter(QUALITY).isEmpty();
     }
 }

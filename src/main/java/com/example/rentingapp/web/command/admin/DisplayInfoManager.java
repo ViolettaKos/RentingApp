@@ -15,7 +15,7 @@ import static com.example.rentingapp.web.command.constants.Model.MANAGER;
 public class DisplayInfoManager implements Command {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse response, CommandType commandType) throws ServiceException {
-        UserService userService= ServiceFactory.getUserService();
+        UserService userService = ServiceFactory.getUserService();
         req.setAttribute(MANAGER, userService.getByLogin(req.getParameter(LOGIN)));
         return Path.EDIT_MANAGER_PAGE;
     }

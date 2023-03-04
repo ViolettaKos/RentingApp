@@ -1,12 +1,8 @@
 package com.example.rentingapp.web.listeners;
 
-import com.example.rentingapp.utils.EmailSender;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import org.apache.log4j.Logger;
-
-import java.io.InputStream;
-import java.util.Properties;
 
 public class EmailListener implements ServletContextListener {
     private static final Logger LOG = Logger.getLogger(EmailListener.class);

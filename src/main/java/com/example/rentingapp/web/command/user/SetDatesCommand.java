@@ -21,16 +21,27 @@ import static com.example.rentingapp.dao.DAOImpl.constants.Fields.CAR_ID;
 
 
 public class SetDatesCommand implements Command {
-    private static final Logger LOG = Logger.getLogger(OrderDAOImpl.class);
+    private static final String DATES = "dates";
 
+
+    /**
+     * This method is used to execute the order page command. It gets the dates which are not available for booking for a
+     * specific car and sets them as an attribute of the request.
+     *
+     * @param req         The HTTP request from the client.
+     * @param resp        The HTTP response from the server.
+     * @param commandType The type of command to execute.
+     * @return A string representing the path to the order page.
+     * @throws ServiceException if there is an error executing the command.
+     */
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp, CommandType commandType) throws ServiceException {
         OrderService orderService = ServiceFactory.getOrderService();
         int car_id;
-        if (req.getParameter(CAR_ID)!=null)
+        if (req.getParameter(CAR_ID) != null)
             car_id = Integer.parseInt(req.getParameter(CAR_ID));
         else {
-            car_id= (int) req.getSession().getAttribute(CAR_ID);
+            car_id = (int) req.getSession().getAttribute(CAR_ID);
             req.getSession().removeAttribute(CAR_ID);
         }
         List<LocalDate> dates;
@@ -40,18 +51,16 @@ public class SetDatesCommand implements Command {
             return Path.ERROR_PAGE;
         }
         String[] myArr = new String[1];
-        if(!dates.isEmpty()) {
+        if (!dates.isEmpty()) {
             DateTimeFormatter formatters = DateTimeFormatter.ofPattern("M/d/uuuu");
             myArr = new String[dates.size()];
             for (int i = 0; i < dates.size(); i++) {
                 String text = dates.get(i).format(formatters).replaceAll("/", "-");
                 myArr[i] = text;
-                System.out.println("Arr " + myArr[i]);
             }
         } else
-            myArr[0]="1/1/2000";
-        LOG.trace("size of my arr"+myArr.length);
-        req.setAttribute("dates", myArr);
+            myArr[0] = "1/1/2000";
+        req.setAttribute(DATES, myArr);
         req.setAttribute(CAR_ID, car_id);
 
         CommandUtil.setAttrToReq(req, Model.MESSAGE);

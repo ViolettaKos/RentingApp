@@ -24,7 +24,9 @@ public interface UserService {
     int getNumberOfRows(String command) throws ServiceException;
 
     void updateStatus(String login, boolean action) throws ServiceException;
+
     void changePass(String username, String newPass) throws ServiceException;
+
     String getNewPass() throws ServiceException;
 
 }

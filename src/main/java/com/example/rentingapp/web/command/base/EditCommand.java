@@ -16,27 +16,26 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
+import static com.example.rentingapp.dao.DAOImpl.constants.Fields.EMAIL;
+import static com.example.rentingapp.dao.DAOImpl.constants.Fields.TELEPHONE;
+import static com.example.rentingapp.web.command.constants.Model.*;
+import static com.example.rentingapp.web.command.constants.Model.PASS;
+
 public class EditCommand implements Command {
     private static final Logger LOG = Logger.getLogger(EditCommand.class);
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, CommandType commandType) throws ServiceException {
-        LOG.debug("Start executing Command");
         return CommandType.GET == commandType ? doGet(request) : doPost(request);
     }
 
     private String doPost(HttpServletRequest req) throws ServiceException {
-        String firstname = req.getParameter("firstname");
-        LOG.trace("Request parameter: fn --> " + firstname);
-        String lastname = req.getParameter("lastname");
-        LOG.trace("Request parameter: ln --> " + lastname);
-        String username = req.getParameter("username");
-        LOG.trace("Request parameter: username --> " + username);
-        String pass = req.getParameter("pass");
-        LOG.trace("Request parameter: pass --> " + pass);
-        String email = req.getParameter("email");
-        LOG.trace("Request parameter: email --> " + email);
-        String telephone = req.getParameter("telephone");
+        String firstname = req.getParameter(FIRSTNAME);
+        String lastname = req.getParameter(LAST_NAME);
+        String username = req.getParameter(USERNAME);
+        String pass = req.getParameter(PASS);
+        String email = req.getParameter(EMAIL);
+        String telephone = req.getParameter(TELEPHONE);
         String path = Path.PROFILE_PAGE;
         try {
             HttpSession session = req.getSession();
@@ -59,7 +58,7 @@ public class EditCommand implements Command {
             req.getSession().setAttribute(Fields.ROLE, user.getRole());
 
         } catch (IncorrectDataException | IncorrectEmailException | DuplicatedLoginException e) {
-            LOG.trace("Error in executing command");
+            LOG.error("Error in executing command");
             req.getSession().setAttribute(Model.MESSAGE, e.getMessage());
             path = Path.EDIT_PAGE;
         }
@@ -68,10 +67,8 @@ public class EditCommand implements Command {
     }
 
 
-
     private String doGet(HttpServletRequest request) {
         CommandUtil.setAttrToReq(request, Model.MESSAGE);
-        LOG.trace("Path: " + CommandUtil.getPath(request));
         return CommandUtil.getPath(request);
     }
 }

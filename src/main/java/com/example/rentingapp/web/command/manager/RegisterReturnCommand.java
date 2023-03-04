@@ -30,29 +30,30 @@ import static com.example.rentingapp.web.command.constants.Model.DAMAGE;
 public class RegisterReturnCommand implements Command {
     private static final Logger LOG = Logger.getLogger(RejectOrderCommand.class);
     private final EmailSender emailSender;
+
     public RegisterReturnCommand(EmailContext emailContext) {
-        emailSender=emailContext.getEmailSender();
+        emailSender = emailContext.getEmailSender();
     }
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp, CommandType commandType) throws ServiceException {
-        int order_id= Integer.parseInt(req.getParameter(ORDER_ID));
-        boolean isDamaged= Boolean.parseBoolean(req.getParameter(DAMAGE));
-        LOG.trace("Is damaged? "+isDamaged);
+        int order_id = Integer.parseInt(req.getParameter(ORDER_ID));
+        boolean isDamaged = Boolean.parseBoolean(req.getParameter(DAMAGE));
+        LOG.trace("Is damaged? " + isDamaged);
 
-        OrderService orderService=ServiceFactory.getOrderService();
-        OrderInfo orderInfo=orderService.getOrderInfo(order_id);
-        UserService userService=ServiceFactory.getUserService();
-        User user=userService.getByLogin(orderInfo.getLogin());
+        OrderService orderService = ServiceFactory.getOrderService();
+        OrderInfo orderInfo = orderService.getOrderInfo(order_id);
+        UserService userService = ServiceFactory.getUserService();
+        User user = userService.getByLogin(orderInfo.getLogin());
 
-        if(isDamaged && req.getParameter(INVOICE)!=null) {
-            String invoice=req.getParameter(INVOICE);
+        if (isDamaged && req.getParameter(INVOICE) != null) {
+            String invoice = req.getParameter(INVOICE);
             sendInvoice(user, invoice);
-        } else if(!isDamaged) {
+        } else if (!isDamaged) {
             sendThanks(user);
         }
 
-        Order order=orderService.getOrderById(order_id);
+        Order order = orderService.getOrderById(order_id);
 
         orderService.updateReturn(order_id);
         order.setReturned(true);

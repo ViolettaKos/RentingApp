@@ -20,23 +20,25 @@ import static com.example.rentingapp.web.command.constants.Model.LOGGED;
 
 public class PayOrderCommand implements Command {
 
-    private final Validator validator=new Validator();
+    private final Validator validator = new Validator();
     private final EmailSender emailSender;
+
     public PayOrderCommand(EmailContext emailContext) {
-        emailSender=emailContext.getEmailSender();
+        emailSender = emailContext.getEmailSender();
     }
+
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse response, CommandType commandType) throws ServiceException {
-        int order_id= Integer.parseInt(req.getParameter(ORDER_ID));
-        int amount= Integer.parseInt(req.getParameter(TOTAL_PRICE));
+        int order_id = Integer.parseInt(req.getParameter(ORDER_ID));
+        int amount = Integer.parseInt(req.getParameter(TOTAL_PRICE));
         User user = (User) req.getSession().getAttribute(LOGGED);
-        int user_money=user.getMoney();
-        if(validator.isEnoughMoney(amount, user_money)) {
-            OrderService orderService= ServiceFactory.getOrderService();
+        int user_money = user.getMoney();
+        if (validator.isEnoughMoney(amount, user_money)) {
+            OrderService orderService = ServiceFactory.getOrderService();
             orderService.updatePayment(order_id);
-            user.setMoney(user.getMoney()-amount);
-            UserService userService=ServiceFactory.getUserService();
-            userService.updateMoney(user.getUsername(), amount*(-1));
+            user.setMoney(user.getMoney() - amount);
+            UserService userService = ServiceFactory.getUserService();
+            userService.updateMoney(user.getUsername(), amount * (-1));
             sendPaymentConf(user);
             return Path.SUCCESS_PAGE;
         } else

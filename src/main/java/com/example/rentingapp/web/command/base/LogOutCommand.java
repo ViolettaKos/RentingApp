@@ -16,7 +16,7 @@ public class LogOutCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, CommandType commandType) throws ServiceException {
-        LOG.debug("Start executing Command");
+        LOG.debug("Logged out");
         HttpSession session = request.getSession();
         if (session.getAttribute(Model.LOGGED) != null) {
             session.invalidate();

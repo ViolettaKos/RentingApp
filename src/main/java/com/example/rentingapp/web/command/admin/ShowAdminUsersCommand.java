@@ -14,11 +14,9 @@ import static com.example.rentingapp.web.command.constants.Commands.COMMAND;
 import static com.example.rentingapp.web.command.constants.Model.USER;
 
 public class ShowAdminUsersCommand implements Command {
-    private static final Logger LOG = Logger.getLogger(ShowAdminUsersCommand.class);
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse response, CommandType commandType) throws ServiceException {
-        LOG.debug("Start executing Command");
         pagination(req, sortCommand(req), USER);
         req.setAttribute(COMMAND, req.getParameter(COMMAND));
         return Path.ADMIN_USERS_PAGE;

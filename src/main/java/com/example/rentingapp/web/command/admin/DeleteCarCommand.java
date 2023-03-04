@@ -14,10 +14,9 @@ import org.apache.log4j.Logger;
 import static com.example.rentingapp.web.command.constants.Model.ID;
 
 public class DeleteCarCommand implements Command {
-    private static final Logger LOG = Logger.getLogger(DeleteCarCommand.class);
+
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, CommandType commandType) throws ServiceException {
-        LOG.trace("Starting deleting car");
         int car_id = Integer.parseInt(request.getParameter(ID));
         CarsService carsService = ServiceFactory.getCarsService();
         carsService.deleteCarById(car_id);

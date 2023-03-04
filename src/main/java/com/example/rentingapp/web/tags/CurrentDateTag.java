@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 public class CurrentDateTag extends SimpleTagSupport {
     @Override
     public void doTag() throws IOException {
-        JspWriter out= getJspContext().getOut();
+        JspWriter out = getJspContext().getOut();
         out.print(formatDate(LocalDate.now()));
     }
 

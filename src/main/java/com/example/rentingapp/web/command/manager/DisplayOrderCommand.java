@@ -15,8 +15,8 @@ import static com.example.rentingapp.web.command.constants.Model.ORDER_INFO;
 public class DisplayOrderCommand implements Command {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse response, CommandType commandType) throws ServiceException {
-        OrderService orderService= ServiceFactory.getOrderService();
-        if(req.getParameter(ID)!=null)
+        OrderService orderService = ServiceFactory.getOrderService();
+        if (req.getParameter(ID) != null)
             req.setAttribute(ORDER_INFO, orderService.getOrderInfo(Integer.parseInt(req.getParameter(ID))));
         else
             req.setAttribute(ORDER_INFO, orderService.getOrderInfo((Integer) req.getSession().getAttribute(ID)));

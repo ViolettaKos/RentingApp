@@ -6,15 +6,15 @@ public interface OrderStatements {
     String SELECT_BY_LOGIN_ORDER_AND_REL =
             "SELECT * FROM `order` INNER JOIN car on `order`.car_id = car.car_id WHERE login=?";
     String UPDATE_PAYMENT = "UPDATE `order` SET isPayed=true WHERE order_id=?";
-    String SORT_ORDERS="SELECT * FROM `order` %s";
+    String SORT_ORDERS = "SELECT * FROM `order` %s";
     String GET_NUMBER_OF_RECORDS_ORDER =
             "SELECT COUNT(order_id) AS numberOfRecords FROM `order` %s";
     String SELECT_BY_ID_ORDER_INFO_AND_REL =
             "SELECT * FROM `order` INNER JOIN car on `order`.car_id = car.car_id WHERE order_id=?";
 
-    String REJECT_AND_COMMENT="UPDATE `order` SET isRejected=true, reason_for_reject=? WHERE order_id=?";
-    String SELECT_ORDER="SELECT * FROM `order` WHERE order_id=?";
-    String ALL_DATES="SELECT `from`, `to`, isRejected, isReturned FROM `order` WHERE car_id=?";
-    String UPDATE_RETURN="UPDATE `order` SET isReturned=true WHERE order_id=?";
-    String SELECT_FROM_TO="SELECT `from`, `to` FROM `order` WHERE car_id=?";
+    String REJECT_AND_COMMENT = "UPDATE `order` SET isRejected=true, reason_for_reject=? WHERE order_id=?";
+    String SELECT_ORDER = "SELECT * FROM `order` WHERE order_id=?";
+    String ALL_DATES = "SELECT `from`, `to`, isRejected, isReturned FROM `order` WHERE car_id=?";
+    String UPDATE_RETURN = "UPDATE `order` SET isReturned=true WHERE order_id=?";
+    String SELECT_FROM_TO = "SELECT `from`, `to` FROM `order` WHERE car_id=?";
 }

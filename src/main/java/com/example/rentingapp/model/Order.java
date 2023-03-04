@@ -26,9 +26,9 @@ public class Order extends Entity {
         this.to = to;
         this.total_days = total_days;
         this.option = option;
-        this.isRejected=isRejected;
-        this.comment=comment;
-        this.isReturned=isReturned;
+        this.isRejected = isRejected;
+        this.comment = comment;
+        this.isReturned = isReturned;
     }
 
     public Order() {

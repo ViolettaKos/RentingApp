@@ -1,5 +1,6 @@
 package com.example.rentingapp.web.command.admin;
 
+import com.example.rentingapp.exception.IncorrectDataException;
 import com.example.rentingapp.exception.ServiceException;
 import com.example.rentingapp.model.Car;
 import com.example.rentingapp.service.CarsService;
@@ -27,14 +28,16 @@ public class EditCarCommand implements Command {
     }
 
     private String doPost(HttpServletRequest req) {
-        CarsService carsService = ServiceFactory.getCarsService();
-        String brand = req.getParameter(BRAND);
-        String name = req.getParameter(NAME);
-        String quality = req.getParameter(QUALITY);
-        int price = Integer.parseInt(req.getParameter(PRICE));
-        String car_id = req.getParameter(ID);
         String path = ADMIN_CARS_PAGE;
         try {
+            if (checkIsEmpty(req))
+                throw new IncorrectDataException();
+            CarsService carsService = ServiceFactory.getCarsService();
+            String brand = req.getParameter(BRAND);
+            String name = req.getParameter(NAME);
+            String quality = req.getParameter(QUALITY);
+            int price = Integer.parseInt(req.getParameter(PRICE));
+            String car_id = req.getParameter(ID);
 
             Car car = carsService.getCarById(car_id);
             car.setId(Integer.parseInt(car_id));
@@ -45,7 +48,7 @@ public class EditCarCommand implements Command {
 
             carsService.updateCar(car);
         } catch (ServiceException e) {
-            LOG.trace("Error in extracting parts");
+            LOG.error("Error in extracting parts");
             path = ERROR_PAGE;
         }
         req.getSession().setAttribute(Path.CURRENT_PATH, path);
@@ -56,5 +59,10 @@ public class EditCarCommand implements Command {
         CarsService carsService = ServiceFactory.getCarsService();
         req.setAttribute(CAR, carsService.getCarById(req.getParameter(ID)));
         return EDIT_CAR_PAGE;
+    }
+
+    private static boolean checkIsEmpty(HttpServletRequest req) {
+        return !req.getParameter(BRAND).isEmpty() || !req.getParameter(NAME).isEmpty() || !req.getParameter(PRICE).isEmpty()
+                || !req.getParameter(QUALITY).isEmpty();
     }
 }

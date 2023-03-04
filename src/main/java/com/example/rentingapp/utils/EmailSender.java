@@ -9,13 +9,13 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.util.Properties;
 
-import static com.example.rentingapp.utils.EmailConstants.MAIL;
-import static com.example.rentingapp.utils.EmailConstants.MAIL_PASS;
-
 public class EmailSender {
     private static final Logger LOG = Logger.getLogger(EmailSender.class);
     private final Session session;
     private final String from;
+
+    private static final String MAIL = "mail";
+    private static final String MAIL_PASS = "mail.pass";
 
 
     public EmailSender(Properties properties) {

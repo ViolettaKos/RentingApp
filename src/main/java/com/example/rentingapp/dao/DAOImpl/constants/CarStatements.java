@@ -1,11 +1,10 @@
 package com.example.rentingapp.dao.DAOImpl.constants;
 
 public interface CarStatements {
-    String SORT_CARS="SELECT * FROM car %s";
-
+    String SORT_CARS = "SELECT * FROM car %s";
     String GET_NUMBER_OF_RECORDS_CAR =
             "SELECT COUNT(car_id) AS numberOfRecords FROM CAR %s";
-    String SELECT_BY_ID_CAR=
+    String SELECT_BY_ID_CAR =
             "SELECT * FROM car WHERE car_id=?";
     String SELECT_BRANDS =
             "SELECT brand FROM car";

@@ -21,45 +21,54 @@ import static com.example.rentingapp.utils.RegexConstants.*;
 public final class Validator {
 
     private static final Logger LOG = Logger.getLogger(UserServiceImpl.class);
-    public void isMatched(String pass, String repeated_pass) throws PasswordNotMatchesException {
-        if(!pass.equals(repeated_pass))
+
+    public void isMatched(String pass, String repeated_pass) throws PasswordNotMatchesException, IncorrectDataException {
+        if (passIsEmpty(pass) || repeated_pass.isEmpty() || !pass.equals(repeated_pass))
             throw new PasswordNotMatchesException();
     }
 
+    public boolean passIsEmpty(String pass) throws IncorrectDataException {
+        if (pass.isEmpty())
+            throw new IncorrectDataException();
+        return false;
+    }
+
     public void validateEmail(String email) throws IncorrectEmailException {
-        if(!EmailValidator.getInstance().isValid(email))
+        if (!EmailValidator.getInstance().isValid(email))
             throw new IncorrectEmailException();
     }
 
     public void validateData(String data) throws IncorrectDataException {
         checkRegex(data);
     }
+
     public void validateLogin(String login) throws IncorrectDataException {
-        if(login==null || !login.matches(USERNAME_PATTERN)) {
-            LOG.trace("Incorrect login");
+        if (login.isEmpty() || !login.matches(USERNAME_PATTERN)) {
             throw new IncorrectDataException();
         }
     }
 
 
     private static void checkRegex(String data) throws IncorrectDataException {
-        if(data==null || !data.matches(NAME_PATTERN)) {
-            LOG.trace("Incorrect names");
-            throw new IncorrectDataException(); }
+        if (data.isEmpty() || !data.matches(NAME_PATTERN)) {
+            throw new IncorrectDataException();
+        }
     }
 
     public void validateTelephone(String telephone) throws IncorrectDataException {
-        if(telephone==null || !telephone.matches(PHONE_PATTERN)) {
-            LOG.trace("Incorrect telephone");
-            throw new IncorrectDataException(); }
+        if (telephone.isEmpty() || !telephone.matches(PHONE_PATTERN)) {
+            throw new IncorrectDataException();
+        }
     }
 
     public void checkAge(String age) throws NotAdultException {
+        if (age.isEmpty())
+            throw new NotAdultException();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         formatter = formatter.withLocale(Locale.ENGLISH);
         LocalDate date = LocalDate.parse(age, formatter);
         LocalDate localDate = LocalDate.now();
-        if(18 > Period.between(date, localDate).getYears())
+        if (18 > Period.between(date, localDate).getYears())
             throw new NotAdultException();
         LOG.trace("Age is valid");
     }
@@ -69,7 +78,7 @@ public final class Validator {
         try {
             Date d1 = sdformat.parse(from);
             Date d2 = sdformat.parse(to);
-            if(d1.before(new Date()) || d2.before(new Date())) {
+            if (d1.before(new Date()) || d2.before(new Date())) {
                 LOG.trace("Date from or to occurs after now Date");
                 throw new IncorrectDataException();
             }
@@ -82,11 +91,11 @@ public final class Validator {
                 LOG.trace("Date from == Date to");
             }
         } catch (ParseException e) {
-            LOG.trace("Exception while parsing dates!");
+            LOG.error("Exception while parsing dates!");
         }
     }
 
     public boolean isEnoughMoney(int amount, int user_money) {
-        return user_money>=amount;
+        return user_money >= amount;
     }
 }
