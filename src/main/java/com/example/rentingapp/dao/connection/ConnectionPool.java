@@ -19,7 +19,7 @@ public class ConnectionPool {
     private static final String FILE = "app.properties";
 
     private static DataSource dataSource;
-
+    private ConnectionPool(){}
     public static synchronized DataSource getDataSource() {
         if (dataSource == null) {
             LOG.trace("Null datasource");

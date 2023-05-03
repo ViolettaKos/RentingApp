@@ -52,6 +52,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
     @Override
     public void checkIfExists(String username) throws ServiceException {
         try {

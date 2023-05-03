@@ -82,12 +82,12 @@
                     <label><fmt:message key="lease"/>:</label>
                     <br>
                     <label><fmt:message key="from"/>:</label>
-                    <input type="text" name="from" id="from"  size="12" />
+                    <input type="text" name="from" id="from"  size="12" required />
 <%--                    <input type="date" class="form-control" required name="from" min="<ctg:date/>">--%>
 
                     <label style="margin-left: 20px"><fmt:message key="to"/>:</label>
 
-                    <input type="text" name="to" id="to" size="12">
+                    <input type="text" name="to" id="to" size="12" required>
 <%--                    <input type="date" class="form-control" required name="to" min="<ctg:date/>">--%>
                 </div>
                 <div class="d-flex justify-content-between align-items-center">

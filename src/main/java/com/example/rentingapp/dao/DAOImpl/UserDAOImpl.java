@@ -3,7 +3,6 @@ package com.example.rentingapp.dao.DAOImpl;
 
 import com.example.rentingapp.dao.UserDAO;
 import com.example.rentingapp.exception.DAOException;
-import com.example.rentingapp.model.Car;
 import com.example.rentingapp.model.User;
 import org.apache.log4j.Logger;
 
@@ -16,8 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.example.rentingapp.dao.DAOImpl.constants.CarStatements.GET_NUMBER_OF_RECORDS_CAR;
-import static com.example.rentingapp.dao.DAOImpl.constants.CarStatements.SORT_CARS;
 import static com.example.rentingapp.dao.DAOImpl.constants.Fields.*;
 import static com.example.rentingapp.dao.DAOImpl.constants.UserStatements.*;
 
@@ -40,7 +37,6 @@ public class UserDAOImpl implements UserDAO {
             throw new DAOException(e);
         }
     }
-
     @Override
     public void updateUser(User user) throws DAOException {
         try (Connection connection = dataSource.getConnection();

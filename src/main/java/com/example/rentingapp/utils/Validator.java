@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -75,11 +76,20 @@ public final class Validator {
 
     public void checkDate(String from, String to) throws IncorrectDataException {
         SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+        sdformat.setLenient(false);
         try {
             Date d1 = sdformat.parse(from);
             Date d2 = sdformat.parse(to);
+            int year1 = getYearFromDate(d1);
+            int year2=getYearFromDate(d2);
             if (d1.before(new Date()) || d2.before(new Date())) {
                 LOG.trace("Date from or to occurs after now Date");
+                throw new IncorrectDataException();
+            }
+            Calendar calendar = Calendar.getInstance();
+            int currentYear = calendar.get(Calendar.YEAR);
+            if (year1 > currentYear + 1 || year2 > currentYear + 1) {
+                LOG.trace("Input year is more than the current year plus 1");
                 throw new IncorrectDataException();
             }
             if (d1.compareTo(d2) > 0) {
@@ -92,7 +102,14 @@ public final class Validator {
             }
         } catch (ParseException e) {
             LOG.error("Exception while parsing dates!");
+            throw new IncorrectDataException();
         }
+    }
+
+    private int getYearFromDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.YEAR);
     }
 
     public boolean isEnoughMoney(int amount, int user_money) {
