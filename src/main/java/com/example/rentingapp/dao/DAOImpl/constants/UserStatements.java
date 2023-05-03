@@ -7,7 +7,7 @@ public interface UserStatements {
     String SELECT_USER_BY_LOGIN =
             "SELECT * FROM user WHERE login=?";
     String UPDATE_USER =
-            "UPDATE user SET first_name=?, last_name=?, login=?, password=?, email=?, telephone=? WHERE user_id=?";
+            "UPDATE user SET first_name=?, last_name=?, password=?, email=?, telephone=? WHERE user_id=?";
     String UPDATE_MONEY_MINUS =
             "UPDATE user SET money=IF(user.money IS NULL OR money = '', ? ,money - ?) WHERE login=?";
     String UPDATE_MONEY_PLUS =

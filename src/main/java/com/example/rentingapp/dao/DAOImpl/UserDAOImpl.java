@@ -199,12 +199,11 @@ public class UserDAOImpl implements UserDAO {
     }
 
     private void prepareStForUpdate(User obj, PreparedStatement ps) throws SQLException {
-        ps.setString(5, obj.getEmail());
-        ps.setString(6, obj.getTelephone());
-        ps.setString(4, obj.getPassword());
+        ps.setString(4, obj.getEmail());
+        ps.setString(5, obj.getTelephone());
+        ps.setString(3, obj.getPassword());
         ps.setString(1, obj.getFirstName());
         ps.setString(2, obj.getLastName());
-        ps.setString(3, obj.getUsername());
         ps.setInt(7, obj.getId());
     }
 

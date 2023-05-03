@@ -57,13 +57,6 @@
                  value="${user.lastName}">
         </div>
         <div class="form-group">
-          <label><fmt:message key="username"/> *</label>
-          <input type="text" class="form-control" required name="username"
-                 pattern="^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){2,18}[a-zA-Z0-9]$"
-                 title="<fmt:message key="register.login"/>"
-                 value="${user.username}">
-        </div>
-        <div class="form-group">
           <label><fmt:message key="password"/> *</label>
           <input type="password" class="form-control" required name="pass"
                  pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$"

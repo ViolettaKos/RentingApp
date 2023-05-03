@@ -32,7 +32,6 @@ public class EditCommand implements Command {
     private String doPost(HttpServletRequest req) throws ServiceException {
         String firstname = req.getParameter(FIRSTNAME);
         String lastname = req.getParameter(LAST_NAME);
-        String username = req.getParameter(USERNAME);
         String pass = req.getParameter(PASS);
         String email = req.getParameter(EMAIL);
         String telephone = req.getParameter(TELEPHONE);
@@ -41,14 +40,10 @@ public class EditCommand implements Command {
             HttpSession session = req.getSession();
             User user = (User) session.getAttribute(Model.LOGGED);
             UserService userService = ServiceFactory.getUserService();
-            if (!username.equals(user.getUsername())) {
-                userService.checkIfExists(username);
-            }
             user.setId(user.getId());
             user.setFirstName(firstname);
             user.setLastName(lastname);
             user.setPassword(pass);
-            user.setUsername(username);
             user.setEmail(email);
             user.setTelephone(telephone);
 
