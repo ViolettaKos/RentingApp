@@ -119,7 +119,7 @@ public class AddCarCommand implements Command {
     }
 
     private static boolean checkIsEmpty(HttpServletRequest req) {
-        return !req.getParameter(BRAND).isEmpty() || !req.getParameter(NAME).isEmpty() || !req.getParameter(PRICE).isEmpty()
-                || !req.getParameter(QUALITY).isEmpty();
+        return req.getParameter(BRAND).isEmpty() || req.getParameter(NAME).isEmpty() || req.getParameter(PRICE).isEmpty()
+                || req.getParameter(QUALITY).isEmpty();
     }
 }
