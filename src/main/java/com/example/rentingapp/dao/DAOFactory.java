@@ -23,6 +23,7 @@ public class DAOFactory extends AbstractDAO {
     private CarDAO carDAO;
     private OrderDAO orderDAO;
 
+    @Override
     public UserDAO getUserDAO() {
         if (userDAO == null) {
             userDAO = new UserDAOImpl(dataSource);

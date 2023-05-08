@@ -204,7 +204,7 @@ public class UserDAOImpl implements UserDAO {
         ps.setString(3, obj.getPassword());
         ps.setString(1, obj.getFirstName());
         ps.setString(2, obj.getLastName());
-        ps.setInt(7, obj.getId());
+        ps.setInt(6, obj.getId());
     }
 
     private User newUser(ResultSet rs) throws SQLException {

@@ -134,8 +134,8 @@ public class User extends Entity {
         return blocked == user.blocked && money == user.money && role.equals(user.role) && username.equals(user.username) && firstName.equals(user.firstName) && lastName.equals(user.lastName) && email.equals(user.email) && telephone.equals(user.telephone) && password.equals(user.password);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(role, username, firstName, lastName, email, telephone, password, blocked, money);
-    }
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(role, username, firstName, lastName, email, telephone, password, blocked, money);
+//    }
 }

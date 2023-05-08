@@ -72,7 +72,7 @@ public class CommandManager {
     public Command defineCommand(String command) {
         if (command == null || !commands.containsKey(command)) {
             LOG.trace("Command " + command + " do not exists!");
-            return commands.get("error");
+            return commands.get(ERROR);
         }
         return commands.get(command);
     }

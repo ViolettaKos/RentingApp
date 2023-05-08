@@ -89,8 +89,10 @@ public final class Access {
 
     private boolean checkCommands() {
         if (command != null) {
+            LOG.trace("Is contained? "+commands.contains(command));
             return commands.contains(command);
         }
+        LOG.trace("Command in check is null "+command);
         return true;
     }
 }
